@@ -4,7 +4,7 @@
             <v-list>
                 <v-list-subheader>Atende Cidadão</v-list-subheader>
                 <v-list-item prepend-icon="mdi-home">Home</v-list-item>
-                <v-list-item prepend-icon="mdi-badge-account-horizontal-outline"> <!-- <Link :href="route('person.index')"></Link> -->Pessoas</v-list-item>
+                <v-list-item prepend-icon="mdi-badge-account-horizontal-outline"> <Link :href="route('person.index')">Pessoas</Link></v-list-item>
                 <v-list-item prepend-icon="mdi-school">Protocolos</v-list-item>
                 <v-list-item prepend-icon="mdi-account-group">Usuários</v-list-item>
                 <v-list-item prepend-icon="mdi-cog-outline">Configurações</v-list-item>
@@ -18,7 +18,11 @@
       
 
         <AuthenticatedLayout>
-           
+           <v-main>
+                <div class="container">
+                    <p>hello</p>
+                </div>
+           </v-main>
         </AuthenticatedLayout>
     </v-app>
 
