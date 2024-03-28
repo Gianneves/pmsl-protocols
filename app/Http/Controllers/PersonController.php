@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PersonResource;
 use App\Models\Person;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -14,7 +15,8 @@ class PersonController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Person/Index');
+        $people = PersonResource::collection(Person::all());
+        return Inertia::render('Person/Index', compact('people'));
     }
 
     /**

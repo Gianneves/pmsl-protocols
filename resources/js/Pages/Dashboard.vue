@@ -1,35 +1,33 @@
 <template>
+    <Head title="Atendimento Cidadão" />
+    <NavBar />
     <v-app>
-        <v-navigation-drawer v-model="isDrawerOpen">
-            <v-list>
-                <v-list-subheader>Atende Cidadão</v-list-subheader>
-                <v-list-item prepend-icon="mdi-home">Home</v-list-item>
-                <v-list-item prepend-icon="mdi-badge-account-horizontal-outline">
-                    <Link :href="route('person.index')">Pessoas</Link>
-                </v-list-item>
-                <v-list-item prepend-icon="mdi-school">Protocolos</v-list-item>
-                <v-list-item prepend-icon="mdi-account-group">Usuários</v-list-item>
-                <v-list-item prepend-icon="mdi-cog-outline">Configurações</v-list-item>
-            </v-list>
-        </v-navigation-drawer>
-        <Head title="Atendimento Cidadão" />
-        <v-app-bar flat class="border-b" color="indigo-darken-1">
-            <v-app-bar-nav-icon @click="isDrawerOpen = !isDrawerOpen"></v-app-bar-nav-icon>
-        </v-app-bar>
-        <AuthenticatedLayout>
-           <v-main>
-                <div class="container">
-                    
-                </div>
-           </v-main>
-        </AuthenticatedLayout>
+        <v-main class="main-content" >
+            <v-container> <v-text class="bcd">content</v-text></v-container>
+           
+        </v-main>
     </v-app>
 </template>
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { Head } from '@inertiajs/vue3';
+import NavBar from '@/Components/NavBar.vue';
 
-const isDrawerOpen = ref(false);
 </script>
+
+<style scoped>
+
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: -1600px;
+}
+
+.bcd {
+    
+    margin-top: 100px;
+}
+</style>
