@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Person;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class PersonController extends Controller
@@ -28,7 +30,27 @@ class PersonController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'min:3'],
+            'birthdate' => ['required', 'date'],
+            'cpf' => ['required', 'unique:people,cpf', 'min:3']
+        ]);
+
+      
+
+        Person::create([
+            'name' => $request->name,
+            'birthdate' => $request->birthdate,
+            'cpf' => $request->cpf,
+            'gender' => $request->gender,
+            'city' => $request->city,
+            'district' => $request->district,
+            'street' => $request->street,
+            'number' => $request->number,
+            'complement' => $request->complement
+        ]);
+
+        return Redirect::route('person.index');
     }
 
     /**

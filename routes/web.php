@@ -23,7 +23,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('person', PersonController::class);
     Route::resource('protocols', ProtocolsController::class);
-
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

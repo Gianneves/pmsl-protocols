@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->date('birthdate');
-            $table->string('cpf');
-            $table->string('gender');
-            $table->string('city');
-            $table->string('district');
-            $table->string('street');
-            $table->integer('number');
-            $table->string('complement');
+            $table->string('cpf')->unique();
+            $table->string('gender')->nullable();
+            $table->string('city')->nullable();
+            $table->string('district')->nullable();
+            $table->string('street')->nullable();
+            $table->string('number')->nullable();
+            $table->string('complement')->nullable();
             $table->timestamps();
         });
     }
