@@ -1,70 +1,47 @@
 <template>
 
-    <Head title="Pessoas" />
+    <Head title="Protocolos" />
     <NavBar />
     <v-app>
         <v-main class="d-flex">
             <v-container class="container">
                 <v-card flat class="border mb-4" width="900">
                     <div class="d-flex justify-space-between mt-5">
-                        <v-card-title>Pessoas</v-card-title>
+                        <v-card-title>Protocolos</v-card-title>
                         <v-card-title>
                             <v-btn @click="isDialogOpen = true">Cadastrar</v-btn>
                             <v-dialog v-model="isDialogOpen">
                                 <v-card-text class="custom-card">
                                     <v-card-text>
-                                        <v-card-title>Cadastrar Pessoa</v-card-title>
+                                        <v-card-title>Cadastrar Protocolo</v-card-title>
                                         <v-form @submit.prevent="submit">
                                             <v-container>
                                                 <v-row>
                                                     <v-col cols="12" md="4">
-                                                        <v-text-field label="Nome" id="name" v-model="form.name"
-                                                            required variant="outlined">
+                                                        <v-text-field label="Descrição" id="description"
+                                                            v-model="form.description" required variant="outlined">
                                                         </v-text-field>
                                                     </v-col>
 
                                                     <v-col cols="12" md="4">
-                                                        <v-text-field label="Data de nascimento" type="date" id="date"
-                                                            for="date" v-model="form.birthdate" required
+                                                        <v-text-field label="Data" type="date" id="created_data"
+                                                            for="created_at" v-model="form.created_data" required
                                                             variant="outlined">
                                                         </v-text-field>
                                                     </v-col>
 
                                                     <v-col cols="12" md="4">
-                                                        <v-text-field label="CPF" id="cpf" v-model="form.cpf" required
+                                                        <v-text-field label="Prazo" id="deadline" type="number"
+                                                            v-model="form.deadline" required
                                                             variant="outlined"></v-text-field>
                                                     </v-col>
 
                                                     <v-col cols="12" md="4">
-                                                        <v-select label="Sexo" v-model="form.gender"
-                                                            :items="['Masculino', 'Feminino', 'Outro']">
+                                                        <v-select label="Contribuinte" v-model="form.protocols_id"
+                                                            name="protocols_id">
+                                                            <option v-for="person in people" :key="person.id"
+                                                                :value="person.id">{{ person.name }}</option>
                                                         </v-select>
-                                                    </v-col>
-
-
-                                                    <v-col cols="12" md="4">
-                                                        <v-text-field label="Cidade" id="city" v-model="form.city"
-                                                            variant="outlined"></v-text-field>
-                                                    </v-col>
-
-                                                    <v-col cols="12" md="4">
-                                                        <v-text-field label="Bairro" id="district" for="district"
-                                                            v-model="form.district" variant="outlined"></v-text-field>
-                                                    </v-col>
-
-
-                                                    <v-col cols="12" md="4">
-                                                        <v-text-field label="Rua" id="street" for="street"
-                                                            v-model="form.street" variant="outlined"></v-text-field>
-                                                    </v-col>
-
-                                                    <v-col cols="12" md="4">
-                                                        <v-text-field label="N.º" id="number" v-model="form.number"
-                                                            variant="outlined"></v-text-field>
-                                                    </v-col>
-                                                    <v-col cols="12" md="4">
-                                                        <v-text-field label="Complemento" id="complement"
-                                                            v-model="form.complement" variant="outlined"></v-text-field>
                                                     </v-col>
                                                 </v-row>
                                             </v-container>
@@ -87,47 +64,39 @@
                         <thead>
                             <tr>
                                 <th class="text-left">
-                                    #
+                                    Número
                                 </th>
                                 <th class="text-left">
-                                    Nome
+                                    Data
                                 </th>
                                 <th class="text-left">
-                                    CPF
+                                    Prazo
                                 </th>
                                 <th class="text-left">
-                                    Data de Nascimento
-                                </th>
-                                <th class="text-left">
-                                    Sexo
+                                    Nome do Contribuinte
                                 </th>
                                 <th class="text-left">
                                     Ações:
                                 </th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr v-for="person in displayedPerson" :key="person.id">
-                                <td>{{ person.id }}</td>
-                                <td>{{ person.name }}</td>
-                                <td>{{ person.cpf }}</td>
-                                <td>{{ person.birthdate }}</td>
-                                <td>{{ person.gender }}</td>
+                        <!--     <tbody>
+                            <tr v-for="protocol in people" :key="protocol.id">
+                                <td>{{ protocol.id }}</td>
                                 <td>
                                     <div>
                                         <v-btn @click="isEditOpen = true" color="white">
                                             <v-icon class="mdi mdi-eye" color="indigo"></v-icon>
                                         </v-btn>
 
-                                        <v-btn @click="deletePerson(person.id)" color="red" dark class="ml-3">
+                                        <v-btn @click="deletePerson(protocol.id)" color="red" dark class="ml-3">
                                             <v-icon dark class="mdi mdi-delete-forever md-4"></v-icon>
                                         </v-btn>
                                     </div>
                                 </td>
                             </tr>
-                        </tbody>
+                        </tbody> -->
                     </v-table>
-                    <v-pagination v-model="page" :length="pageCount"></v-pagination>
                 </v-card>
             </v-container>
         </v-main>
@@ -138,67 +107,48 @@
 <script setup>
 
 import { Head, useForm } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import NavBar from '@/Components/NavBar.vue';
 import axios from 'axios';
 
-
 const isDialogOpen = ref(false);
-const isEditOpen = ref(false);
-const page = ref(1);
-const itemPerPage = 10;
-const searchFilter = ref('');
-
-const props = defineProps({
-    people: Object
-});
 
 const form = useForm({
-    name: '',
-    birthdate: '',
-    cpf: '',
-    gender: '',
-    city: '',
-    district: '',
-    street: '',
-    number: '',
-    complement: '',
+    description: '',
+    created_data: '',
+    deadline: '',
+    protocols_id: ''
 });
 
+
+
 const submit = () => {
-    form.post(route('person.store'));
+    form.post(route('protocols.store'));
     form.reset();
     isDialogOpen.value = false;
 }
 
+defineProps({
+    people: Array
+});
 
 
+
+
+
+/* const searchFilter = ref('');
 
 const filteredPerson = computed(() => {
     if (searchFilter.value !== '') {
-        return props.people.data.filter(person =>
-            person.name.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
-            person.birthdate.includes(searchFilter.value) ||
-            person.cpf.includes(searchFilter.value) ||
-            person.gender.toLowerCase().includes(searchFilter.value.toLowerCase()));
+        return props.people.data.filter(person => 
+        person.name.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
+        person.birthdate.includes(searchFilter.value) || 
+        person.cpf.includes(searchFilter.value) || 
+        person.gender.toLowerCase().includes(searchFilter.value.toLowerCase()));
     }
     return props.people.data;
 });
-
-const displayedPerson = computed(() => {
-    const start = (page.value - 1) * itemPerPage;
-    const end = start + itemPerPage;
-    return filteredPerson.value.slice(start, end);
-});
-
-const pageCount = computed(() => {
-    return Math.ceil(filteredPerson.value.length / itemPerPage);
-});
-
-const updatePage = (newPage) => {
-    page.value = newPage;
-}
-
+  */
 
 const deletePerson = (id) => {
     axios.delete(`/person/${id}`)

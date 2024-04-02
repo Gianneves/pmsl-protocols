@@ -17,7 +17,6 @@ return new class extends Migration
             $table->text('description');
             $table->date('created_data');
             $table->integer('deadline');
-            $table->string('taxpayer');
             $table->timestamps();
         });
     }

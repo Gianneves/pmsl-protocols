@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PersonResource;
+use App\Http\Resources\ProtocolsResource;
+use App\Models\Person;
+use App\Models\Protocols;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ProtocolsController extends Controller
 {
@@ -11,7 +16,8 @@ class ProtocolsController extends Controller
      */
     public function index()
     {
-        //
+        $protocols = ProtocolsResource::collection(Protocols::with('people')->get());
+        return Inertia::render('Protocols/Index', compact('protocols'));
     }
 
     /**

@@ -1,10 +1,15 @@
 <template>
-    <Head title="Atendimento Cidadão" />
-    <NavBar />
     <v-app>
-        <v-main class="main-content" >
-            <v-container> <v-text class="bcd">content</v-text></v-container>
-           
+        <Head title="Atendimento Cidadão" />
+        <NavBar />
+
+        <v-main class="main-content">
+            <v-container class="container">
+                <h1>Atende Cidadão</h1>
+                <v-img class="img-content" :width="500" aspect-ratio="16/9" cover
+                    src="/img/Wavy_Bus-26_Single-04.jpg"></v-img>
+            </v-container>
+
         </v-main>
     </v-app>
 </template>
@@ -18,16 +23,20 @@ import NavBar from '@/Components/NavBar.vue';
 
 <style scoped>
 
-.main-content {
+.container {
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
-    text-align: center;
-    margin-top: -1600px;
+    margin-top: -800px;
 }
 
-.bcd {
-    
-    margin-top: 100px;
+
+h1  {
+    font-weight: bold;
+    font-size: 45px;
+    margin-bottom: 50px;
 }
+
+
 </style>

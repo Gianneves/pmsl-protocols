@@ -74,16 +74,36 @@ class PersonController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Person $person)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'min:3'],
+            'birthdate' => ['required', 'date'],
+            'cpf' => ['required', 'unique:people,cpf', 'min:3']
+        ]);
+
+        $person->update([
+            'name' => $request->name,
+            'birthdate' => $request->birthdate,
+            'cpf' => $request->cpf,
+            'gender' => $request->gender,
+            'city' => $request->city,
+            'district' => $request->district,
+            'street' => $request->street,
+            'number' => $request->number,
+            'complement' => $request->complement
+        ]);
+
+        return Redirect::route('person.index');
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Person $person)
     {
-        //
+        $person->delete();
+        Redirect::back();
     }
 }
