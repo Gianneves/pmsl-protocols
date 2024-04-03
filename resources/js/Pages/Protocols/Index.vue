@@ -1,5 +1,4 @@
 <template>
-
     <Head title="Protocolos" />
     <NavBar />
     <v-app>
@@ -10,50 +9,9 @@
                         <v-card-title>Protocolos</v-card-title>
                         <v-card-title>
                             <v-btn @click="isDialogOpen = true">Cadastrar</v-btn>
-                            <v-dialog v-model="isDialogOpen">
-                                <v-card-text class="custom-card">
-                                    <v-card-text>
-                                        <v-card-title>Cadastrar Protocolo</v-card-title>
-                                        <v-form @submit.prevent="submit">
-                                            <v-container>
-                                                <v-row>
-                                                    <v-col cols="12" md="4">
-                                                        <v-text-field label="Descrição" id="description"
-                                                            v-model="form.description" required variant="outlined">
-                                                        </v-text-field>
-                                                    </v-col>
-
-                                                    <v-col cols="12" md="4">
-                                                        <v-text-field label="Data" type="date" id="created_data"
-                                                            for="created_at" v-model="form.created_data" required
-                                                            variant="outlined">
-                                                        </v-text-field>
-                                                    </v-col>
-
-                                                    <v-col cols="12" md="4">
-                                                        <v-text-field label="Prazo" id="deadline" type="number"
-                                                            v-model="form.deadline" required
-                                                            variant="outlined"></v-text-field>
-                                                    </v-col>
-
-                                                    <v-col cols="12" md="4">
-                                                        <v-select label="Contribuinte" v-model="form.protocols_id"
-                                                            name="protocols_id">
-                                                            <option v-for="person in people" :key="person.id"
-                                                                :value="person.id">{{ person.name }}</option>
-                                                        </v-select>
-                                                    </v-col>
-                                                </v-row>
-                                            </v-container>
-                                            <v-card-actions>
-                                                <v-spacer></v-spacer>
-                                                <v-btn variant="text" @click="isDialogOpen = false">Cancelar</v-btn>
-                                                <v-btn variant="tonal" color="success" @click="submit">Salvar</v-btn>
-                                            </v-card-actions>
-                                        </v-form>
-                                    </v-card-text>
-                                </v-card-text>
-                            </v-dialog>
+                            <v-dialog v-model="isDialogOpen"  @update:modelValue="updateDialogStatus"  width="900px" >
+                                <ProtocolForm  :isDialogOpen="isDialogOpen" @closeDialog="closeDialog"  />
+                            </v-dialog>      
                         </v-card-title>
                     </div>
                     <div class="input-search">
@@ -106,34 +64,26 @@
 
 <script setup>
 
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import NavBar from '@/Components/NavBar.vue';
+import ProtocolForm from '@/Components/ProtocolForm.vue';
 import axios from 'axios';
 
 const isDialogOpen = ref(false);
 
-const form = useForm({
-    description: '',
-    created_data: '',
-    deadline: '',
-    protocols_id: ''
+
+const props = defineProps({
+    protocols: Object
 });
 
+const updateDialogStatus = (value) => {
+  isDialogOpen.value = value;
+};
 
-
-const submit = () => {
-    form.post(route('protocols.store'));
-    form.reset();
-    isDialogOpen.value = false;
-}
-
-defineProps({
-    people: Array
-});
-
-
-
+const closeDialog = () => {
+  isDialogOpen.value = false;
+};
 
 
 /* const searchFilter = ref('');
@@ -166,13 +116,8 @@ const deletePerson = (id) => {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin-top: -1700px;
-    margin-left: 500px;
-}
-
-.custom-card {
-    background-color: #FFF;
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+    margin-top: -1200px;
+    margin-left: 300px;
 }
 
 .input-search {

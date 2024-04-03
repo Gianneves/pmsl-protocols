@@ -10,72 +10,8 @@
                         <v-card-title>Pessoas</v-card-title>
                         <v-card-title>
                             <v-btn @click="isDialogOpen = true">Cadastrar</v-btn>
-                            <v-dialog v-model="isDialogOpen">
-                                <v-card-text class="custom-card">
-                                    <v-card-text>
-                                        <v-card-title>Cadastrar Pessoa</v-card-title>
-                                        <v-form @submit.prevent="submit">
-                                            <v-container>
-                                                <v-row>
-                                                    <v-col cols="12" md="4">
-                                                        <v-text-field label="Nome" id="name" v-model="form.name"
-                                                            required variant="outlined">
-                                                        </v-text-field>
-                                                    </v-col>
-
-                                                    <v-col cols="12" md="4">
-                                                        <v-text-field label="Data de nascimento" type="date" id="date"
-                                                            for="date" v-model="form.birthdate" required
-                                                            variant="outlined">
-                                                        </v-text-field>
-                                                    </v-col>
-
-                                                    <v-col cols="12" md="4">
-                                                        <v-text-field label="CPF" id="cpf" v-model="form.cpf" required
-                                                            variant="outlined"></v-text-field>
-                                                    </v-col>
-
-                                                    <v-col cols="12" md="4">
-                                                        <v-select label="Sexo" v-model="form.gender"
-                                                            :items="['Masculino', 'Feminino', 'Outro']">
-                                                        </v-select>
-                                                    </v-col>
-
-
-                                                    <v-col cols="12" md="4">
-                                                        <v-text-field label="Cidade" id="city" v-model="form.city"
-                                                            variant="outlined"></v-text-field>
-                                                    </v-col>
-
-                                                    <v-col cols="12" md="4">
-                                                        <v-text-field label="Bairro" id="district" for="district"
-                                                            v-model="form.district" variant="outlined"></v-text-field>
-                                                    </v-col>
-
-
-                                                    <v-col cols="12" md="4">
-                                                        <v-text-field label="Rua" id="street" for="street"
-                                                            v-model="form.street" variant="outlined"></v-text-field>
-                                                    </v-col>
-
-                                                    <v-col cols="12" md="4">
-                                                        <v-text-field label="N.º" id="number" v-model="form.number"
-                                                            variant="outlined"></v-text-field>
-                                                    </v-col>
-                                                    <v-col cols="12" md="4">
-                                                        <v-text-field label="Complemento" id="complement"
-                                                            v-model="form.complement" variant="outlined"></v-text-field>
-                                                    </v-col>
-                                                </v-row>
-                                            </v-container>
-                                            <v-card-actions>
-                                                <v-spacer></v-spacer>
-                                                <v-btn variant="text" @click="isDialogOpen = false">Cancelar</v-btn>
-                                                <v-btn variant="tonal" color="success" @click="submit">Salvar</v-btn>
-                                            </v-card-actions>
-                                        </v-form>
-                                    </v-card-text>
-                                </v-card-text>
+                            <v-dialog v-model="isDialogOpen" @update:modelValue="updateDialogStatus" >
+                              <PersonForm :isDialogOpen="isDialogOpen" @closeDialog="closeDialog" />
                             </v-dialog>
                         </v-card-title>
                     </div>
@@ -115,13 +51,17 @@
                                 <td>{{ person.gender }}</td>
                                 <td>
                                     <div>
-                                        <v-btn @click="isEditOpen = true" color="white">
+                                        <v-btn @click="isEditPersonOpen = true" color="white">
                                             <v-icon class="mdi mdi-eye" color="indigo"></v-icon>
                                         </v-btn>
 
                                         <v-btn @click="deletePerson(person.id)" color="red" dark class="ml-3">
                                             <v-icon dark class="mdi mdi-delete-forever md-4"></v-icon>
                                         </v-btn>
+
+                                        <v-dialog v-model="isEditPersonOpen" @update:modelValue="updateEditStatus" >
+                                            <EditPerson :isEditPersongOpen="isEditPersonOpen" @closeEditPerson="closeEditPerson" />
+                                        </v-dialog>
                                     </div>
                                 </td>
                             </tr>
@@ -137,41 +77,41 @@
 
 <script setup>
 
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import NavBar from '@/Components/NavBar.vue';
+import PersonForm from '@/Components/PersonForm.vue';
+import EditPerson from '@/Components/EditPerson.vue';
 import axios from 'axios';
 
 
 const isDialogOpen = ref(false);
-const isEditOpen = ref(false);
+const isEditPersonOpen = ref(false);
+
 const page = ref(1);
 const itemPerPage = 10;
 const searchFilter = ref('');
 
 const props = defineProps({
-    people: Object
+    people: Object,
 });
 
-const form = useForm({
-    name: '',
-    birthdate: '',
-    cpf: '',
-    gender: '',
-    city: '',
-    district: '',
-    street: '',
-    number: '',
-    complement: '',
-});
+const updateDialogStatus = (value) => {
+  isDialogOpen.value = value;
+};
 
-const submit = () => {
-    form.post(route('person.store'));
-    form.reset();
-    isDialogOpen.value = false;
+const closeDialog = () => {
+  isDialogOpen.value = false;
+};
+
+const updateEditStatus = (value) => {
+  isEditPersonOpen.value = value;
+};
+
+
+const closeEditPerson = () => {
+    isEditPersonOpen.value = false;
 }
-
-
 
 
 const filteredPerson = computed(() => {
@@ -209,6 +149,7 @@ const deletePerson = (id) => {
             console.error('Error deleting person:', error);
         });
 }
+
 </script>
 
 <style scoped>
@@ -216,13 +157,8 @@ const deletePerson = (id) => {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin-top: -1700px;
-    margin-left: 500px;
-}
-
-.custom-card {
-    background-color: #FFF;
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+    margin-top: -800px;
+    margin-left: 300px;
 }
 
 .input-search {
@@ -230,5 +166,9 @@ const deletePerson = (id) => {
     margin-left: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.error-msg {
+    color: red;
 }
 </style>

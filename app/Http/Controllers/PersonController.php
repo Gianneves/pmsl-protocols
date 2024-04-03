@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserStoreRequest;
 use App\Http\Resources\PersonResource;
 use App\Models\Person;
 use Illuminate\Http\Request;
@@ -30,15 +31,10 @@ class PersonController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
-        $request->validate([
-            'name' => ['required', 'min:3'],
-            'birthdate' => ['required', 'date'],
-            'cpf' => ['required', 'unique:people,cpf', 'min:3']
-        ]);
-
       
+
 
         Person::create([
             'name' => $request->name,

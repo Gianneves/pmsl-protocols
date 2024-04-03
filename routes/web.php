@@ -4,6 +4,7 @@ use App\Http\Controllers\PersonController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProtocolsController;
 use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -21,7 +22,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::resource('person', PersonController::class);
+    Route::resource('person', PersonController::class)->middleware(HandlePrecognitiveRequests::class);
     Route::resource('protocols', ProtocolsController::class);
 });
 
