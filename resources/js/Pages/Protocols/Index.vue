@@ -18,7 +18,7 @@
                         <v-text-field label="Buscar" dense v-model="searchFilter" variant="outlined"></v-text-field>
                     </div>
                     <hr>
-                    <v-table>
+                    <v-data-table>
                         <thead>
                             <tr>
                                 <th class="text-left">
@@ -38,7 +38,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <!--     <tbody>
+                        <tbody>
                             <tr v-for="protocol in people" :key="protocol.id">
                                 <td>{{ protocol.id }}</td>
                                 <td>
@@ -53,8 +53,8 @@
                                     </div>
                                 </td>
                             </tr>
-                        </tbody> -->
-                    </v-table>
+                        </tbody> 
+                    </v-data-table>
                 </v-card>
             </v-container>
         </v-main>

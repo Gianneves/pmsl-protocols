@@ -13,6 +13,7 @@
                             <v-dialog v-model="isDialogOpen" @update:modelValue="updateDialogStatus" >
                               <PersonForm :isDialogOpen="isDialogOpen" @closeDialog="closeDialog" />
                             </v-dialog>
+                            
                         </v-card-title>
                     </div>
                     <div class="input-search">
@@ -51,18 +52,17 @@
                                 <td>{{ person.gender }}</td>
                                 <td>
                                     <div>
-                                        <v-btn @click="isEditPersonOpen = true" color="white">
+                                        <v-btn @click="editSelectedPerson(person)" color="white">
                                             <v-icon class="mdi mdi-eye" color="indigo"></v-icon>
                                         </v-btn>
 
                                         <v-btn @click="deletePerson(person.id)" color="red" dark class="ml-3">
                                             <v-icon dark class="mdi mdi-delete-forever md-4"></v-icon>
                                         </v-btn>
-
-                                        <v-dialog v-model="isEditPersonOpen" @update:modelValue="updateEditStatus" >
-                                            <EditPerson :isEditPersongOpen="isEditPersonOpen" @closeEditPerson="closeEditPerson" />
-                                        </v-dialog>
                                     </div>
+                                    <v-dialog v-model="isEditPersonOpen" @update:modelValue="updateEditStatus" >
+                                            <EditPerson :isEditPersonOpen="isEditPersonOpen" @closeEditPerson="closeEditPerson" :person="selectedPerson" />
+                                     </v-dialog>
                                 </td>
                             </tr>
                         </tbody>
@@ -83,6 +83,13 @@ import NavBar from '@/Components/NavBar.vue';
 import PersonForm from '@/Components/PersonForm.vue';
 import EditPerson from '@/Components/EditPerson.vue';
 import axios from 'axios';
+
+const selectedPerson = ref(null);
+
+const editSelectedPerson = (person) => { 
+    selectedPerson.value = person
+    isEditPersonOpen.value = true;
+}
 
 
 const isDialogOpen = ref(false);

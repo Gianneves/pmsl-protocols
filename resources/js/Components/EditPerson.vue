@@ -2,38 +2,33 @@
   <v-card-text class="custom-card">
       <v-card-text>
           <v-card-title>Editar Pessoa</v-card-title>
-          <v-form @submit.prevent="submit">
+          <v-form @submit.prevent="editPerson">
               <v-container>
                   <v-row>
                       <v-col cols="12" md="4">
-                          <v-text-field label="Nome" id="name" v-model="form.name" @change="form.validate('name')"
+                          <v-text-field label="Nome" id="name" v-model="form.name"
                               required variant="outlined">
                           </v-text-field>
-                          <v-messages :messages="form.errors.name" class="error-msg"
-                              v-if="form.errors.name"></v-messages>
                       </v-col>
 
                       <v-col cols="12" md="4">
                           <v-text-field label="Data de nascimento" type="date" id="date" for="date"
-                              v-model="form.birthdate" required @change="form.validate('birthdate')" variant="outlined">
+                              v-model="form.birthdate" required variant="outlined">
                           </v-text-field>
-                          <v-messages :messages="form.errors.birthdate" class="error-msg"
-                              v-if="form.errors.birthdate"></v-messages>
+                       
                       </v-col>
 
                       <v-col cols="12" md="4">
                           <v-text-field label="CPF" id="cpf" v-model="form.cpf" required
-                              @change="form.validate('cpf')" variant="outlined"></v-text-field>
-                          <v-messages :messages="form.errors.birthdate" class="error-msg"
-                              v-if="form.errors.cpf"></v-messages>
+                               variant="outlined" readonly></v-text-field>
+                          
                       </v-col>
 
                       <v-col cols="12" md="4">
-                          <v-select label="Sexo" v-model="form.gender" required @change="form.validate('gender')"
+                          <v-select label="Sexo" v-model="form.gender" required 
                               :items="['Masculino', 'Feminino', 'Outro']">
                           </v-select>
-                          <v-messages :messages="form.errors.birthdate" class="error-msg"
-                              v-if="form.errors.gender"></v-messages>
+                       
                       </v-col>
 
 
@@ -66,7 +61,7 @@
               <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn variant="text" @click="$emit('closeEditPerson')" >Cancelar</v-btn>
-                  <v-btn variant="tonal" color="success" @click="submit">Salvar</v-btn>
+                  <v-btn variant="tonal" @click="editPerson" color="success">Salvar</v-btn>
               </v-card-actions>
           </v-form>
       </v-card-text>
@@ -74,9 +69,15 @@
 </template>
 
 <script setup>
-import { useForm } from 'laravel-precognition-vue-inertia';
+/* import { useForm } from 'laravel-precognition-vue-inertia'; */
 import { Inertia } from '@inertiajs/inertia';
-import { defineProps, ref, emit } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import { onMounted, ref } from 'vue';
+
+const props = defineProps({
+    isEditPersonOpen: Boolean,
+    person: Object
+});
 
 const form = useForm({
   name: '',
@@ -90,20 +91,42 @@ const form = useForm({
   complement: '',
 });
 
-const submit = () => {
-  Inertia.post(route('person.update'), form.data())
-        .then(() => {
-            form.reset();
-            $emit('closeEditPerson');
-        })
-        .catch((error) => {
-            console.error('Erro ao enviar formulário:', error);
-        });
-}
 
-const props = defineProps({
-isEditPersonOpen: Boolean
+onMounted(() => {
+    if (props.person) {
+        form.name = props.person.name;
+        form.birthdate = props.person.birthdate;
+        form.cpf = props.person.cpf;
+        form.gender = props.person.gender;
+        form.city = props.person.city;
+        form.district = props.person.district;
+        form.street = props.person.street;
+        form.number = props.person.number;
+        form.complement = props.person.complement;
+
+        if (props.person.birthdate) {
+            form.birthdate = new Date(props.person.birthdate).toISOString().substr(0, 10);
+        }
+
+    }
 });
+
+
+const editPerson = () => {
+    Inertia.post(`/person/${props.person.id}`, {
+        _method: "put",
+        name: form.name,
+        birthdate: form.birthdate,
+        cpf: form.cpf,
+        gender: form.gender,
+        city: form.city,
+        district: form.district,
+        street: form.street,
+        number: form.number,
+        complement: form.complement
+
+    });
+}
 
 </script>
 
@@ -113,4 +136,4 @@ isEditPersonOpen: Boolean
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
 }
 
-</style>
+</style> 

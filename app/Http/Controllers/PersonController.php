@@ -75,7 +75,13 @@ class PersonController extends Controller
         $request->validate([
             'name' => ['required', 'min:3'],
             'birthdate' => ['required', 'date'],
-            'cpf' => ['required', 'unique:people,cpf', 'min:3']
+            'cpf' => ['required', 'unique:people,cpf', 'min:11', 'max:11'],
+            'gender' => ['nullable', 'in:Masculino,Feminino,Outro'],
+            'city' => ['nullable', 'string'],
+            'district' => ['nullable', 'string'],
+            'street' => ['nullable', 'string'],
+            'number' => ['nullable', 'string'],
+            'complement' => ['nullable', 'string'],
         ]);
 
         $person->update([
