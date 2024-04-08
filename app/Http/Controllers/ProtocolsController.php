@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProtocolsRequest;
 use App\Http\Resources\PersonResource;
 use App\Http\Resources\ProtocolsResource;
 use App\Models\Person;
@@ -18,8 +19,9 @@ class ProtocolsController extends Controller
      */
     public function index()
     {
+        $people = Person::get(['id', 'name']);
         $protocols = ProtocolsResource::collection(Protocols::with('people')->get());
-        return Inertia::render('Protocols/Index', compact('protocols'));
+        return Inertia::render('Protocols/Index', compact('protocols', 'people'));
     }
 
     /**
@@ -33,20 +35,16 @@ class ProtocolsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProtocolsRequest $request)
     {
-        $request->validate([
-            'description' => ['required', 'min:3'],
-            'person_id' => ['required'],
-            'created_data' => ['required', 'min:3'],
-            'deadline' => ['required']
-        ]);
+
+        $validatedData = $request->validated();
 
         Protocols::create([
-            'description' => $request->description,
-            'person_id' => $request->person_id,
-            'created_data' => $request->created_data,
-            'deadline' => $request->deadline
+            'description' => $validatedData['description'],
+            'created_data' => $validatedData['created_data'],
+            'deadline' => $validatedData['deadline'],
+            'person_id' => $validatedData['person_id'],
         ]);
 
         return Redirect::route('protocols.index');

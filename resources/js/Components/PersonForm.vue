@@ -9,31 +9,36 @@
                             <v-text-field label="Nome" id="name" v-model="form.name" @change="form.validate('name')"
                                 required variant="outlined">
                             </v-text-field>
-                            <v-messages :messages="form.errors.name" class="error-msg"
-                                v-if="form.errors.name"></v-messages>
+                            <span v-if="form.invalid('name')" class="text-base text-red-500">
+                                {{ form.errors.name }}
+                            </span>
                         </v-col>
 
                         <v-col cols="12" md="4">
                             <v-text-field label="Data de nascimento" type="date" id="date" for="date"
-                                v-model="form.birthdate" required @change="form.validate('date')" variant="outlined">
+                                v-model="form.birthdate" required @change="form.validate('birthdate')"
+                                variant="outlined">
                             </v-text-field>
-                            <v-messages :messages="form.errors.birthdate" class="error-msg"
-                                v-if="form.errors.birthdate"></v-messages>
+                            <span v-if="form.invalid('birthdate')" class="text-base text-red-500">
+                                {{ form.errors.birthdate }}
+                            </span>
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-text-field label="CPF" id="cpf" v-model="form.cpf" required
-                                @change="form.validate('cpf')" variant="outlined"></v-text-field>
-                            <v-messages :messages="form.errors.birthdate" class="error-msg"
-                                v-if="form.errors.cpf"></v-messages>
+                            <v-text-field label="CPF" id="cpf" v-model="form.cpf" v-mask="'###.###.###-##'" required
+                            @input="formatCPF" @change="form.validate('cpf')" variant="outlined"></v-text-field>
+                            <span v-if="form.invalid('cpf')" class="text-base text-red-500">
+                                {{ form.errors.cpf }}
+                            </span>
                         </v-col>
 
                         <v-col cols="12" md="4">
                             <v-select label="Sexo" v-model="form.gender" required @change="form.validate('gender')"
                                 :items="['Masculino', 'Feminino', 'Outro']">
                             </v-select>
-                            <v-messages :messages="form.errors.birthdate" class="error-msg"
-                                v-if="form.errors.gender"></v-messages>
+                            <span v-if="form.invalid('gender')" class="text-base text-red-500">
+                                {{ form.errors.gender }}
+                            </span>
                         </v-col>
 
 
@@ -65,7 +70,7 @@
                 </v-container>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn variant="text" @click="$emit('closeDialog')" >Cancelar</v-btn>
+                    <v-btn variant="text" @click="$emit('closeDialog')">Cancelar</v-btn>
                     <v-btn variant="tonal" color="success" @click="submit">Salvar</v-btn>
                 </v-card-actions>
             </v-form>
@@ -75,7 +80,12 @@
 
 <script setup>
 import { useForm } from 'laravel-precognition-vue-inertia';
-import { Inertia } from '@inertiajs/inertia';
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+
+const toast = useToast();
+const emit = defineEmits(['closeDialog']);
 
 const form = useForm('post', route('person.store'), {
     name: '',
@@ -89,20 +99,37 @@ const form = useForm('post', route('person.store'), {
     complement: '',
 });
 
-const submit = () => {
-    Inertia.post('/person', form.data())
-        .then(() => {
-            form.reset();
-            isDialogOpen.value = false;
-        })
-        .catch((error) => {
-            console.error('Erro ao enviar formulário:', error);
+const submit = () => form.submit({
+    preserveScroll: true,
+    onSuccess: () => {
+        form.reset();
+        toast.success("Pessoa criada com Sucesso!", {
+            position: 'top-right',
         });
+        emit('closeDialog');
+    },
+    onError: () => {
+        toast.error("Erro ao criar Pessoa!", {
+            position: 'top-right',
+        });
+        
+    }
+});
+
+
+const formatCPF = () => {
+    let cpf = form.cpf.replace(/\D/g, ''); 
+    cpf = cpf.replace(/^(\d{3})(\d)/, '$1.$2'); 
+    cpf = cpf.replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3'); 
+    cpf = cpf.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4'); 
+    form.cpf = cpf;
+    form.validate('cpf');
 }
 
 const props = defineProps({
-  isDialogOpen: Boolean
+    isDialogOpen: Boolean
 });
+
 
 </script>
 
@@ -111,5 +138,4 @@ const props = defineProps({
     background-color: #FFF;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
 }
-
 </style>

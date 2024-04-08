@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Psy\Readline\Hoa\Protocol;
+
 
 class Person extends Model
 {
@@ -13,6 +13,6 @@ class Person extends Model
     protected $fillable = ['name', 'birthdate', 'cpf', 'gender', 'city', 'district', 'street', 'number', 'complement'];
 
     public function protocols() {
-        return $this->hasMany(Protocol::class);
+        return $this->hasMany(Protocols::class);
     }
 }

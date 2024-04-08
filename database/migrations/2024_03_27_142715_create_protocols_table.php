@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('protocols', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('person_id')->constrained('people')->cascadeOnDelete();
             $table->text('description');
             $table->date('created_data');
             $table->integer('deadline');
             $table->timestamps();
+            $table->foreignId('person_id')->constrained('people')->cascadeOnDelete();
         });
     }
 

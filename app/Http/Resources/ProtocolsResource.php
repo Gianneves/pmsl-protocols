@@ -20,7 +20,7 @@ class ProtocolsResource extends JsonResource
             'description' => $this->description,
             'created_data' => Carbon::parse($this->created_data)->format('d/m/Y'),
             'deadline' => $this->deadline,
-            'people' => new PersonResource($this->whenLoaded('people'))
+            'person' => new PersonResource($this->whenLoaded('person'))
         ];
     }
 }

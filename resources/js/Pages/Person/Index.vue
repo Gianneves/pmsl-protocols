@@ -56,10 +56,13 @@
                                             <v-icon class="mdi mdi-eye" color="indigo"></v-icon>
                                         </v-btn>
 
-                                        <v-btn @click="deletePerson(person.id)" color="red" dark class="ml-3">
+                                        <v-btn @click="deleteSelectPerson(person)" color="red" dark class="ml-3">
                                             <v-icon dark class="mdi mdi-delete-forever md-4"></v-icon>
                                         </v-btn>
                                     </div>
+                                    <v-dialog v-model="isDeletePersonOpen" @update:model-value="updateDeleteStatus" >
+                                        <DeletePerson :isDeletePersonOpen="isDeletePersonOpen" @closeDeletePerson="closeDeletePerson" :person="selectedPerson" />
+                                    </v-dialog>
                                     <v-dialog v-model="isEditPersonOpen" @update:modelValue="updateEditStatus" >
                                             <EditPerson :isEditPersonOpen="isEditPersonOpen" @closeEditPerson="closeEditPerson" :person="selectedPerson" />
                                      </v-dialog>
@@ -82,18 +85,29 @@ import { ref, computed } from 'vue';
 import NavBar from '@/Components/NavBar.vue';
 import PersonForm from '@/Components/PersonForm.vue';
 import EditPerson from '@/Components/EditPerson.vue';
+import DeletePerson from '@/Components/DeletePerson.vue';
 import axios from 'axios';
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
 
 const selectedPerson = ref(null);
 
 const editSelectedPerson = (person) => { 
-    selectedPerson.value = person
+    selectedPerson.value = person;
     isEditPersonOpen.value = true;
+}
+
+
+const deleteSelectPerson = (person) => {
+    selectedPerson.value = person;
+    isDeletePersonOpen.value = true;
 }
 
 
 const isDialogOpen = ref(false);
 const isEditPersonOpen = ref(false);
+const isDeletePersonOpen = ref(false);
 
 const page = ref(1);
 const itemPerPage = 10;
@@ -115,6 +129,14 @@ const updateEditStatus = (value) => {
   isEditPersonOpen.value = value;
 };
 
+
+const closeDeletePerson = () => {
+  isDeletePersonOpen.value = false;
+};
+
+const updateDeleteStatus = (value) => {
+  isDeletePersonOpen.value = value;
+};
 
 const closeEditPerson = () => {
     isEditPersonOpen.value = false;
@@ -147,6 +169,9 @@ const updatePage = (newPage) => {
 }
 
 
+
+
+
 const deletePerson = (id) => {
     axios.delete(`/person/${id}`)
         .then(response => {
@@ -164,8 +189,8 @@ const deletePerson = (id) => {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin-top: -800px;
-    margin-left: 300px;
+    margin-top: -1700px;
+    margin-left: 500px;
 }
 
 .input-search {
@@ -175,7 +200,4 @@ const deletePerson = (id) => {
     margin-bottom: 10px;
 }
 
-.error-msg {
-    color: red;
-}
 </style>

@@ -104,9 +104,7 @@ onMounted(() => {
         form.number = props.person.number;
         form.complement = props.person.complement;
 
-        if (props.person.birthdate) {
-            form.birthdate = new Date(props.person.birthdate).toISOString().substr(0, 10);
-        }
+     
 
     }
 });

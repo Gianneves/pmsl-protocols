@@ -33,14 +33,14 @@ class PersonController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-      
-
+        
+        $validatedData = $request->validated();
 
         Person::create([
-            'name' => $request->name,
-            'birthdate' => $request->birthdate,
-            'cpf' => $request->cpf,
-            'gender' => $request->gender,
+            'name' => $validatedData['name'],
+            'birthdate' => $validatedData['birthdate'],
+            'cpf' => $validatedData['cpf'],
+            'gender' => $validatedData['gender'],
             'city' => $request->city,
             'district' => $request->district,
             'street' => $request->street,
@@ -70,25 +70,16 @@ class PersonController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Person $person)
+    public function update(UserStoreRequest $request, Person $person)
     {
-        $request->validate([
-            'name' => ['required', 'min:3'],
-            'birthdate' => ['required', 'date'],
-            'cpf' => ['required', 'unique:people,cpf', 'min:11', 'max:11'],
-            'gender' => ['nullable', 'in:Masculino,Feminino,Outro'],
-            'city' => ['nullable', 'string'],
-            'district' => ['nullable', 'string'],
-            'street' => ['nullable', 'string'],
-            'number' => ['nullable', 'string'],
-            'complement' => ['nullable', 'string'],
-        ]);
+        
+        $validatedData = $request->validated();
 
         $person->update([
-            'name' => $request->name,
-            'birthdate' => $request->birthdate,
-            'cpf' => $request->cpf,
-            'gender' => $request->gender,
+            'name' => $validatedData['name'],
+            'birthdate' => $validatedData['birthdate'],
+            'cpf' => $validatedData['cpf'],
+            'gender' => $validatedData['gender'],
             'city' => $request->city,
             'district' => $request->district,
             'street' => $request->street,

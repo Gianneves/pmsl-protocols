@@ -23,7 +23,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::resource('person', PersonController::class)->middleware(HandlePrecognitiveRequests::class); 
-    Route::resource('protocols', ProtocolsController::class);
+    Route::resource('protocols', ProtocolsController::class)->middleware(HandlePrecognitiveRequests::class);
 });
 
 require __DIR__ . '/auth.php';
