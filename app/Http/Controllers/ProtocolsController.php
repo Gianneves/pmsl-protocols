@@ -9,6 +9,7 @@ use App\Models\Person;
 use App\Models\Protocols;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Psy\Readline\Hoa\Protocol;
 
@@ -20,7 +21,7 @@ class ProtocolsController extends Controller
     public function index()
     {
         $people = Person::get(['id', 'name']);
-        $protocols = ProtocolsResource::collection(Protocols::with('people')->get());
+        $protocols = ProtocolsResource::collection(Protocols::with('person')->get());
         return Inertia::render('Protocols/Index', compact('protocols', 'people'));
     }
 
@@ -40,13 +41,22 @@ class ProtocolsController extends Controller
 
         $validatedData = $request->validated();
 
-        Protocols::create([
+      
+        $protocol = Protocols::create([
             'description' => $validatedData['description'],
             'created_data' => $validatedData['created_data'],
             'deadline' => $validatedData['deadline'],
             'person_id' => $validatedData['person_id'],
         ]);
 
+        if($protocol) {
+            if ($request->hasFile('files')) {
+                foreach ($request->file('files') as $file) {
+                    $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+                    $file->storeAs('protocols', $fileName);
+                }
+            }
+        }
         return Redirect::route('protocols.index');
     }
 
@@ -77,8 +87,16 @@ class ProtocolsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Protocols $protocol)
     {
-        //
+
+        if (!empty($protocol->files)) {
+            foreach ($protocol->files as $file) {
+                Storage::delete('protocols/' . $file);
+            }
+        }
+
+        $protocol->delete();
+        Redirect::back();
     }
 }

@@ -28,9 +28,9 @@ import NavBar from '@/Components/NavBar.vue';
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    margin-top: -800px;
+    margin-top: -1200px;
 }
-
+ 
 
 h1  {
     font-weight: bold;

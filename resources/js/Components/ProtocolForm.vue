@@ -24,20 +24,34 @@
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-select label="Contribuinte" v-model="form.person_id"  @change="form.validate('person_id')" :items="people" item-title="name" >
+                            <v-select label="Contribuinte" v-model="form.person_id" @change="form.validate('person_id')"
+                                :items="people" item-title="name" item-value="id">
                             </v-select>
                             <span v-if="form.invalid('person_id')" class="text-base text-red-500">
                                 {{ form.errors.person_id }}
                             </span>
                         </v-col>
-                        <v-col cols="12" md="4">
-                            <v-textarea label="Descrição" id="description" v-model="form.description" required
-                                variant="outlined" maxlength="2000" style="width: 500px;" @change="form.validate('description')">
-                            </v-textarea>
-                            <span v-if="form.invalid('description')" class="text-base text-red-500">
-                                {{ form.errors.description }}
-                            </span>
-                        </v-col>
+
+                        <v-row>
+                            <v-col>
+                                <v-textarea label="Descrição" id="description" v-model="form.description" required
+                                    variant="outlined" maxlength="2000" style="width: 440px;"
+                                    @change="form.validate('description')">
+                                </v-textarea>
+                                <span v-if="form.invalid('description')" class="text-base text-red-500">
+                                    {{ form.errors.description }}
+                                </span>
+                            </v-col>
+                            <v-col>
+                                <v-file-input label="Anexar arquivos" id="files" v-model="form.files" variant="outlined"  multiple
+                                    maxlength="2000" style="width: 300px;" @change="form.validate('files')">
+                                </v-file-input>
+                                <span v-if="form.invalid('files')" class="text-base text-red-500">
+                                    {{ form.errors.files }}
+                                </span>
+                            </v-col>
+                        </v-row>
+
                     </v-row>
                 </v-container>
                 <v-card-actions>
@@ -63,7 +77,8 @@ const form = useForm('post', route('protocols.store'), {
     description: '',
     created_data: '',
     deadline: '',
-    person_id: ''
+    person_id: '',
+    files: ''
 });
 
 const submit = () => form.submit({
@@ -79,7 +94,6 @@ const submit = () => form.submit({
         toast.error("Erro ao criar Protocolo!", {
             position: 'top-right',
         });
-        emit('closeDialog');
     }
 });
 
@@ -89,9 +103,6 @@ const props = defineProps({
     isDialogOpen: Boolean,
     people: Array
 });
-
-
-
 
 </script>
 

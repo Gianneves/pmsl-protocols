@@ -13,18 +13,14 @@ import * as directives from 'vuetify/directives';
 import '@mdi/font/css/materialdesignicons.css';
 import { md1 } from 'vuetify/blueprints';
 
-
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
-
 const vuetify = createVuetify({
     components,
     directives,
     blueprint: md1,
-  });
-  
+});
 
 createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
+    title: (title) => `${title}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
         return createApp({ render: () => h(App, props) })

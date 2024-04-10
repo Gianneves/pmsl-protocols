@@ -9,7 +9,7 @@ class Protocols extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['description', 'created_data', 'deadline', 'person_id'];
+    protected $fillable = ['description', 'created_data', 'deadline', 'person_id', 'files'];
 
     public function person() {
         return $this->belongsTo(Person::class, 'person_id');

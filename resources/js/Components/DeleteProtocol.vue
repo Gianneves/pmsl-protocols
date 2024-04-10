@@ -1,11 +1,11 @@
 <template>
     <v-container class="d-flex align-center justify-center" >
         <v-card class="custom-card" width="400px">
-            <v-card-text>Tem certeza que deseja excluir {{ props.person.name }} ?</v-card-text>
+            <v-card-text>Tem certeza que deseja excluir protocolo de N.º {{ props.protocol }} ?</v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn variant="text" @click="$emit('closeDeletePerson')">Cancelar</v-btn>
-                <v-btn variant="tonal" color="red" @click="deletePerson(props.person)" >Deletar</v-btn>
+                <v-btn variant="text" @click="$emit('closeDeleteProtocol')">Cancelar</v-btn>
+                <v-btn variant="tonal" color="red" @click="deleteProtocol(props.protocol)" >Deletar</v-btn>
             </v-card-actions>
         </v-card>
     </v-container>
@@ -20,25 +20,25 @@ import 'vue-toast-notification/dist/theme-sugar.css';
 
 const toast = useToast();
 
-const emit = defineEmits(['closeDeletePerson']);
+const emit = defineEmits(['closeDeleteProtocol']);
 
 const props = defineProps({
     isDeletePersonOpen: Boolean,
-    person: Object
+    protocol: Object
 });
 
-const deletePerson = (person) => {
-    axios.delete(`/person/${person.id}`)
+const deleteProtocol = (protocol) => {
+    axios.delete(`/protocols/${protocol}`)
         .then(response => {
-            toast.success("Pessoa excluída com sucesso!", {
+            toast.success("Protocolo excluído com sucesso!", {
                 position: 'top-right',
             });
-            emit('closeDeletePerson');
+            emit('closeDeleteProtocol');
             window.location.reload();
         })
         .catch(error => {
-            console.error('Error deleting person:', error);
-            toast.error("Erro ao excluir a pessoa!", {
+            console.error('Error deleting protocol:', error);
+            toast.error("Erro ao excluir protocolo!", {
                 position: 'top-right',
             });
         });

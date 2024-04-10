@@ -86,12 +86,17 @@ import NavBar from '@/Components/NavBar.vue';
 import PersonForm from '@/Components/PersonForm.vue';
 import EditPerson from '@/Components/EditPerson.vue';
 import DeletePerson from '@/Components/DeletePerson.vue';
-import axios from 'axios';
-import { useToast } from 'vue-toast-notification';
-import 'vue-toast-notification/dist/theme-sugar.css';
-
 
 const selectedPerson = ref(null);
+const page = ref(1);
+const itemPerPage = 10;
+const searchFilter = ref('');
+
+
+const isDialogOpen = ref(false);
+const isEditPersonOpen = ref(false);
+const isDeletePersonOpen = ref(false);
+
 
 const editSelectedPerson = (person) => { 
     selectedPerson.value = person;
@@ -103,15 +108,6 @@ const deleteSelectPerson = (person) => {
     selectedPerson.value = person;
     isDeletePersonOpen.value = true;
 }
-
-
-const isDialogOpen = ref(false);
-const isEditPersonOpen = ref(false);
-const isDeletePersonOpen = ref(false);
-
-const page = ref(1);
-const itemPerPage = 10;
-const searchFilter = ref('');
 
 const props = defineProps({
     people: Object,
@@ -168,30 +164,17 @@ const updatePage = (newPage) => {
     page.value = newPage;
 }
 
-
-
-
-
-const deletePerson = (id) => {
-    axios.delete(`/person/${id}`)
-        .then(response => {
-            location.reload();
-        })
-        .catch(error => {
-            console.error('Error deleting person:', error);
-        });
-}
-
 </script>
 
 <style scoped>
+
 .container {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin-top: -1700px;
-    margin-left: 500px;
-}
+    margin-top: -800px;
+    margin-left: 300px;
+}  
 
 .input-search {
     width: 400px;
