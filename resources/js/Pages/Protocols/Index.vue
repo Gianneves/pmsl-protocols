@@ -1,12 +1,12 @@
 <template>
 
     <Head title="Protocolos" />
-    <NavBar />
+    
     <v-app>
-
+        <NavBar />
         <v-main class="d-flex">
             <v-container class="container">
-                <v-card flat class="border mb-4" width="100%">
+                <v-card flat class="border mb-4" width="90%">
                     <div class="d-flex justify-space-between mt-5">
                         <v-card-title>Protocolos</v-card-title>
                         <v-card-title>
@@ -49,9 +49,11 @@
                                 <td>{{ protocol.person.name }}</td>
                                 <td>
                                     <div>
-                                        <v-btn @click="isEditOpen = true" color="white">
-                                            <v-icon class="mdi mdi-eye" color="indigo"></v-icon>
-                                        </v-btn>
+                                        <Link :href="route('protocols.edit', protocol.id)">
+                                            <v-btn color="white">
+                                                <v-icon class="mdi mdi-eye" color="indigo"></v-icon>
+                                            </v-btn>
+                                        </Link>
                                         <v-btn @click="deleteSelectProtocol(protocol.id)" color="red" dark class="ml-3">
                                             <v-icon dark class="mdi mdi-delete-forever md-4"></v-icon>
                                         </v-btn>
@@ -78,7 +80,7 @@
 
 <script setup>
 
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { defineProps } from 'vue';
 import { ref, computed } from 'vue';
 import NavBar from '@/Components/NavBar.vue';
@@ -165,8 +167,8 @@ const formatDeadline = (created_data, deadline) => {
     justify-content: center;
     flex-direction: column;
     margin-top: -1200px;
-    margin-left: 250px;
-} 
+    margin-left: 400px;
+}
 
 .input-search {
     width: 400px;

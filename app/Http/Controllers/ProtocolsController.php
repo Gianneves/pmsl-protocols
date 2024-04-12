@@ -47,14 +47,18 @@ class ProtocolsController extends Controller
             'created_data' => $validatedData['created_data'],
             'deadline' => $validatedData['deadline'],
             'person_id' => $validatedData['person_id'],
+            'files' => '',
         ]);
 
         if($protocol) {
             if ($request->hasFile('files')) {
+                $fileNames = [];
                 foreach ($request->file('files') as $file) {
                     $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
-                    $file->storeAs('protocols', $fileName);
+                    $file->storeAs('public/protocols', $fileName);
+                    $fileNames[] = $fileName;
                 }
+                $protocol->update(['files' => implode(',', $fileNames)]);
             }
         }
         return Redirect::route('protocols.index');
@@ -71,17 +75,37 @@ class ProtocolsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Protocols $protocol)
     {
-        //
+        $people = Person::all();
+        return Inertia::render('Protocols/Edit', compact('protocol', 'people'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProtocolsRequest $request, Protocols $protocol)
     {
-        //
+        $validatedData = $request->validated();
+
+        $protocol->update([
+            'description' => $validatedData['description'],
+            'created_data' => $validatedData['created_data'],
+            'deadline' => $validatedData['deadline'],
+            'person_id' => $validatedData['person_id'],
+        ]);
+    
+        if ($request->hasFile('files')) {
+            $fileNames = [];
+            foreach ($request->file('files') as $file) {
+                $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('protocols', $fileName);
+                $fileNames[] = $fileName;
+            }
+            $protocol->update(['files' => implode(',', $fileNames)]);
+        }
+    
+        return Redirect::route('protocols.index'); 
     }
 
     /**
@@ -91,8 +115,14 @@ class ProtocolsController extends Controller
     {
 
         if (!empty($protocol->files)) {
-            foreach ($protocol->files as $file) {
-                Storage::delete('protocols/' . $file);
+            $files = explode(',', $protocol->files);
+            foreach ($files as $file) {
+                $filePath = 'protocols/' . trim($file);
+                
+                if (Storage::exists($filePath)) {
+                    // Delete the file
+                    Storage::delete($filePath);
+                }
             }
         }
 

@@ -172,8 +172,8 @@ const updatePage = (newPage) => {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin-top: -800px;
-    margin-left: 300px;
+    margin-top: -1600px;
+    margin-left: 500px;
 }  
 
 .input-search {

@@ -93,7 +93,7 @@ const props = defineProps({
 
 const form = useForm('put', route('person.update', { id: props.person.id }), {
   name: props.person.name,
-  birthdate: props.person.birthdate,
+  birthdate: props.person?.birthdate,
   cpf: props.person.cpf,
   gender: props.person.gender,
   city: props.person.city,
