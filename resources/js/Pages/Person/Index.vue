@@ -1,9 +1,9 @@
 <template>
 
     <Head title="Pessoas" />
-    <NavBar />
     <v-app>
-        <v-main class="d-flex">
+        <AuthenticatedLayout>
+            <v-main class="d-flex">
             <v-container class="container">
                 <v-card flat class="border mb-4" width="900">
                     <div class="d-flex justify-space-between mt-5">
@@ -73,7 +73,9 @@
                     <v-pagination v-model="page" :length="pageCount"></v-pagination>
                 </v-card>
             </v-container>
-        </v-main>
+        </v-main>F
+        </AuthenticatedLayout>
+       
     </v-app>
 
 </template>
@@ -82,7 +84,7 @@
 
 import { Head } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
-import NavBar from '@/Components/NavBar.vue';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PersonForm from '@/Components/PersonForm.vue';
 import EditPerson from '@/Components/EditPerson.vue';
 import DeletePerson from '@/Components/DeletePerson.vue';
