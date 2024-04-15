@@ -5,7 +5,7 @@
         <AuthenticatedLayout>
             <v-main class="d-flex">
             <v-container class="container">
-                <v-card flat class="border mb-4" width="900">
+                <v-card flat class="border mb-4" width="90%">
                     <div class="d-flex justify-space-between mt-5">
                         <v-card-title>Pessoas</v-card-title>
                         <v-card-title>
@@ -174,8 +174,7 @@ const updatePage = (newPage) => {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin-top: -1600px;
-    margin-left: 500px;
+ 
 }  
 
 .input-search {

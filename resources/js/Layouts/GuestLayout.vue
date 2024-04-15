@@ -1,20 +1,37 @@
 <script setup>
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+import { ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
+const isDrawerOpen = ref(false);
 </script>
 
 <template>
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-        <div>
-            <Link href="/">
-                <ApplicationLogo class="w-20 h-20 fill-current text-gray-500" />
-            </Link>
-        </div>
+    <v-app>
+        <v-navigation-drawer v-model="isDrawerOpen">
+            <v-list>
+                <v-list-item-title class="headline mb-5 mt-5"><v-avatar image="/img/455809-PFEHU6-634.jpg"
+                        size="58"></v-avatar> Atende
+                    Cidadão</v-list-item-title>
+                    <v-list-item prepend-icon="mdi-home">
+                    <Link href="/">Home</Link>
+                </v-list-item>
+                <v-list-item prepend-icon="mdi mdi-account-plus">
+                    <Link :href="route('register')">Cadastrar</Link>
+                </v-list-item>
+                <v-list-item prepend-icon="mdi mdi-login">
+                    <Link :href="route('login')">Entrar</Link>
+                </v-list-item>
+            </v-list>
 
-        <div
-            class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg"
-        >
+        </v-navigation-drawer>
+        <v-app-bar flat class="border-b flex justify-between" color="indigo-darken-1">
+            <v-app-bar-nav-icon @click="isDrawerOpen = !isDrawerOpen"></v-app-bar-nav-icon>
+        </v-app-bar>
+
+
+        <main>
             <slot />
-        </div>
-    </div>
+        </main>
+    
+    </v-app>
 </template>
