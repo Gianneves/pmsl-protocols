@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->char('profile', 1)->default('A')->whereIn('profile', ['T', 'S', 'A']);
+            $table->char('profile', 1)->default('A');
             $table->string('cpf')->unique();
-            $table->char('active', 1)->default('S')->whereIn('active', ['S', 'N']);
+            $table->char('active', 1)->default('S');
         });
     }
 
