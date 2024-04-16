@@ -1,6 +1,6 @@
 <template>
     <v-app>
-    <AuthenticatedLayout>
+        <AuthenticatedLayout>
 
             <Head title="Editar protocolo" />
             <v-card class="card-container" width="900px">
@@ -42,17 +42,12 @@
                                 </span>
                             </v-col>
                             <v-col cols="12" class="input-col">
-                                <div v-if="props.protocol.files">
-                                    <v-card-title>Arquivos:</v-card-title>
-                                    <ul>
-                                        <li v-for="file in props.protocol.files" :key="file">
-                                            <div>
+                                <v-card-title v-if="props.protocol.files">
+                                    Arquivos:
 
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div v-else>
+                                 
+                                </v-card-title>
+                       <!--          <div v-else>
                                     <v-file-input label="Anexar arquivos" id="files" v-model="form.files"
                                         variant="outlined" multiple maxlength="2000" style="width: 300px;"
                                         @change="form.validate('files')">
@@ -60,7 +55,7 @@
                                     <span v-if="form.invalid('files')" class="text-base text-red-500">
                                         {{ form.errors.files }}
                                     </span>
-                                </div>
+                                </div> -->
                             </v-col>
                         </v-row>
                     </v-container>
@@ -71,14 +66,14 @@
                 </v-form>
             </v-card>
 
-    </AuthenticatedLayout>
-</v-app>
+        </AuthenticatedLayout>
+    </v-app>
 </template>
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import NavBar from '@/Components/NavBar.vue';
+
 import { useForm } from 'laravel-precognition-vue-inertia';
 import { defineProps, ref } from 'vue';
 import { useToast } from 'vue-toast-notification';
@@ -117,15 +112,12 @@ const submit = () => form.submit({
     }
 });
 
-console.log(props.protocol.files)
-
 </script>
 
 
 <style scoped>
-    .card-container {
-        margin-top: 100px;
-        margin-left: 300px;
-    }
-
+.card-container {
+    margin-top: 100px;
+    margin-left: 300px;
+}
 </style>

@@ -1,28 +1,3 @@
-<script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
-
-const form = useForm({
-    name: '',
-    email: '',
-    password: '',
-    profile: '',
-    cpf: '',
-    password_confirmation: '',
-    active: ''
-});
-
-const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
-    });
-};
-</script>
-
 <template>
     <GuestLayout>
 
@@ -35,42 +10,55 @@ const submit = () => {
                     <v-form @submit.prevent="submit">
                         <div class="mt-4">
                             <v-text-field id="name" type="text" label="Nome Completo" v-model="form.name" required
-                                autofocus autocomplete="name" variant="outlined"></v-text-field>
-                            <InputError class="mt-2" :message="form.errors.name" />
+                                autofocus autocomplete="name" @change="form.validate('name')" variant="outlined"></v-text-field>
+                                <span v-if="form.invalid('name')" class="text-base text-red-500">
+                                {{ form.errors.name }}
+                            </span>
                         </div>
                         <div class="mt-4">
                             <v-text-field id="email" type="email" class="mt-1" label="Email" v-model="form.email"
-                                required autofocus autocomplete="email" variant="outlined"></v-text-field>
-                            <InputError class="mt-2" :message="form.errors.email" />
+                                required autofocus autocomplete="email" @change="form.validate('email')" variant="outlined"></v-text-field>
+                                <span v-if="form.invalid('email')" class="text-base text-red-500">
+                                {{ form.errors.email }}
+                            </span>
                         </div>
                         <div class="mt-4">
                             <v-text-field id="password" type="password" label="Senha" class="mt-1"
-                                v-model="form.password" required autocomplete="current-password"
+                                v-model="form.password" required @change="form.validate('password')" autocomplete="current-password"
                                 variant="outlined"></v-text-field>
-                            <InputError class="mt-2" :message="form.errors.password" />
+                                <span v-if="form.invalid('password')" class="text-base text-red-500">
+                                {{ form.errors.password }}
+                            </span>
                         </div>
 
                         <div class="mt-4">
                             <v-text-field id="password_confirmation" type="password" label="Confirmar Senha"
-                                v-model="form.password_confirmation" required autocomplete="new-password"
+                                v-model="form.password_confirmation" @change="form.validate('password_confirmation')"  required autocomplete="new-password"
                                 variant="outlined"></v-text-field>
-
-                            <InputError class="mt-2" :message="form.errors.password_confirmation" />
+                                <span v-if="form.invalid('password_confirmation')" class="text-base text-red-500">
+                                {{ form.errors.password_confirmation }}
+                            </span>
                         </div>
                         <div class="mt-4">
                             <v-select id="profile"  label="Perfil" :items="['T', 'S', 'A']" v-model="form.profile" required
-                                autofocus autocomplete="profile" variant="outlined"></v-select>
-                            <InputError class="mt-2" :message="form.errors.profile" />
+                                autofocus autocomplete="profile" @change="form.validate('profile')" variant="outlined"></v-select>
+                                <span v-if="form.invalid('profile')" class="text-base text-red-500">
+                                {{ form.errors.profile }}
+                            </span>
                         </div>
                         <div class="mt-4">
-                            <v-text-field id="cpf" type="text" label="CPF" v-model="form.cpf" required autofocus
-                                autocomplete="cpf" variant="outlined"></v-text-field>
-                            <InputError class="mt-2" :message="form.errors.cpf" />
+                            <v-text-field id="cpf" type="text" label="CPF" v-model="form.cpf" @change="form.validate('cpf')" required autofocus
+                                autocomplete="cpf"  @input="formatCPF" v-mask="'###.###.###-##'" variant="outlined"></v-text-field>
+                                <span v-if="form.invalid('cpf')" class="text-base text-red-500">
+                                {{ form.errors.cpf }}
+                            </span>
                         </div>
                         <div class="mt-4">
-                            <v-select id="active" :items="['S', 'N']" label="Ativo" v-model="form.active" required autofocus
+                            <v-select id="active" :items="['S', 'N']" label="Ativo" v-model="form.active" @change="form.validate('active')" required autofocus
                                 autocomplete="active" variant="outlined"></v-select>
-                            <InputError class="mt-2" :message="form.errors.active" />
+                                <span v-if="form.invalid('active')" class="text-base text-red-500">
+                                {{ form.errors.active }}
+                            </span>
                         </div>
                         <div class="mt-5">
                             <Link :href="route('login')"
@@ -90,6 +78,56 @@ const submit = () => {
 
     </GuestLayout>
 </template>
+
+
+<script setup>
+import GuestLayout from '@/Layouts/GuestLayout.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import { Head, Link } from '@inertiajs/vue3';
+import { useForm } from 'laravel-precognition-vue-inertia';
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+const toast = useToast();
+
+const form = useForm('post', route('register'), {
+    name: '',
+    email: '',
+    password: '',
+    profile: '',
+    cpf: '',
+    password_confirmation: '',
+    active: ''
+});
+
+const submit = () => form.submit ({
+    preserveScroll: true,
+    onSuccess: () => {
+        form.reset();
+        toast.success("Usuário criado com Sucesso!", {
+            position: 'top-right',
+        });
+    },
+    onError: () => {
+        toast.error("Erro ao criar Usuário!", {
+            position: 'top-right',
+        });
+    }
+});
+
+
+const formatCPF = () => {
+    let cpf = form.cpf.replace(/\D/g, ''); 
+    cpf = cpf.replace(/^(\d{3})(\d)/, '$1.$2'); 
+    cpf = cpf.replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3'); 
+    cpf = cpf.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4'); 
+    form.cpf = cpf;
+    form.validate('cpf');
+}
+
+</script>
+
+
 
 <style scoped>
 .custom-card {

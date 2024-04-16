@@ -24,6 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('person', PersonController::class)->middleware(HandlePrecognitiveRequests::class); 
     Route::resource('protocols', ProtocolsController::class)->middleware(HandlePrecognitiveRequests::class);
+ 
 });
 
 require __DIR__ . '/auth.php';
