@@ -22,7 +22,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::resource('person', PersonController::class)->middleware(HandlePrecognitiveRequests::class); 
+    Route::resource('person', PersonController::class)->middleware(HandlePrecognitiveRequests::class);
     Route::resource('protocols', ProtocolsController::class)->middleware(HandlePrecognitiveRequests::class);
  
 });
