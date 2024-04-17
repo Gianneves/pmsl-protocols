@@ -15,9 +15,6 @@ const isDrawerOpen = ref(false);
                     <v-list-item prepend-icon="mdi-home">
                     <Link href="/">Home</Link>
                 </v-list-item>
-                <v-list-item prepend-icon="mdi mdi-account-plus">
-                    <Link :href="route('register')">Cadastrar</Link>
-                </v-list-item>
                 <v-list-item prepend-icon="mdi mdi-login">
                     <Link :href="route('login')">Entrar</Link>
                 </v-list-item>
