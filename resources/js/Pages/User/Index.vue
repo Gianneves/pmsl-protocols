@@ -7,8 +7,10 @@
                     <v-card flat class="border mb-4" width="90%">
                         <div class="d-flex justify-space-between mt-5">
                             <v-card-title>Usuários</v-card-title>
-                            <v-card-title>
-                                <v-btn>Cadastrar Usuário</v-btn>
+                            <v-card-title v-if="authUser.profile == 'T' || authUser.profile == 'S'" >
+                                <Link :href="route('user.create')">
+                                    <v-btn>Cadastrar Usuário</v-btn>
+                                </Link>
                             </v-card-title>
                         </div>
                         <div class="input-search">
@@ -39,7 +41,7 @@
                                 <tr  v-for="user in displayedUser" :key="user.id">
                                     <td>{{ user.id }}</td>
                                     <td>{{ user.email }}</td>
-                                    <td>{{ user.profile }}</td>
+                                    <td>{{ formatedProfile(user.profile) }}</td>
                                     <td>{{ user.active }}</td>
                                     <td>
                                         <div>
@@ -79,14 +81,20 @@ const itemPerPage = 10;
 const searchFilter = ref('');
 
 const props = defineProps({
-    user: Array
+    user: Array,
+    authUser: Object
 });
 
+const formatedProfile = (profile) => {
+    if(profile === 'T') return 'Administrador TI'
+    if(profile === 'S') return 'Administrador Sistema'
+    if(profile === 'A') return 'Atendente'
+}
 
 const filteredUser = computed(() => {
     if (searchFilter.value !== '') {
         return props.user.filter(u =>
-            u.id.includes(searchFilter.value));
+            u.email.includes(searchFilter.value.toLowerCase()));
     }
     return props.user;
 });
@@ -105,6 +113,9 @@ const pageCount = computed(() => {
 const updatePage = (newPage) => {
     page.value = newPage;
 }
+
+
+
 
 </script>
 

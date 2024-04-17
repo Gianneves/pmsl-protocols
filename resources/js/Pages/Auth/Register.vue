@@ -1,5 +1,5 @@
 <template>
-    <GuestLayout>
+     <AuthenticatedLayout>
 
         <Head title="Cadastrar" />
 
@@ -76,12 +76,12 @@
             </v-container>
         </v-main>
 
-    </GuestLayout>
+    </AuthenticatedLayout>
 </template>
 
 
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import { useForm } from 'laravel-precognition-vue-inertia';

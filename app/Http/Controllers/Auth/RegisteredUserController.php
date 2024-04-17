@@ -19,8 +19,9 @@ class RegisteredUserController extends Controller
    
     public function index()
     {
+        $authUser = Auth::user();
         $user = User::all();
-        return Inertia::render('User/Index', compact('user'));
+        return Inertia::render('User/Index', compact('user', 'authUser'));
     }
 
 
@@ -37,21 +38,45 @@ class RegisteredUserController extends Controller
     public function store(UserCreateRequest $request): RedirectResponse
     {
 
-        $validatedData = $request->validated();
+        $authProfile = Auth::user()->profile;
 
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
-            'profile' => $validatedData['profile'],
-            'cpf' => $validatedData['cpf'],
-            'active' => 'S'
-        ]);
+        if ($authProfile === 'T') {
+            $validatedData = $request->validated();
 
-        event(new Registered($user));
+            $user = User::create([
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'password' => Hash::make($validatedData['password']),
+                'profile' => $validatedData['profile'],
+                'cpf' => $validatedData['cpf'],
+                'active' => 'S'
+            ]);
 
-        Auth::login($user);
+            event(new Registered($user));
 
-        return redirect(route('dashboard', absolute: false));
+
+            return redirect()->route('user.index');
+        } elseif ($authProfile === 'S') {
+            $validatedData = $request->validated();
+
+            if ($validatedData['profile'] === 'A') {
+                $user = User::create([
+                    'name' => $validatedData['name'],
+                    'email' => $validatedData['email'],
+                    'password' => Hash::make($validatedData['password']),
+                    'profile' => $validatedData['profile'],
+                    'cpf' => $validatedData['cpf'],
+                    'active' => 'S'
+                ]);
+
+                event(new Registered($user));
+
+                return redirect()->route('user.index');
+            } else {
+                abort(403, 'Unauthorized action.');
+            }
+        } else {
+            abort(403, 'Unauthorized action.');
+        }
     }
 }
