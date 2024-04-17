@@ -16,9 +16,14 @@ use Inertia\Response;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
+   
+    public function index()
+    {
+        $user = User::all();
+        return Inertia::render('User/Index', compact('user'));
+    }
+
+
     public function create(): Response
     {
         return Inertia::render('Auth/Register');

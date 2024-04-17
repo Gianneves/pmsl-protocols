@@ -18,7 +18,7 @@
                             <v-text-field label="Buscar" dense v-model="searchFilter" variant="outlined"></v-text-field>
                         </div>
                         <hr>
-                        <v-data-table v-if="protocols.data.length > 0">
+                        <v-table v-if="protocols.data.length > 0">
                             <thead>
                                 <tr>
                                     <th class="text-left">
@@ -39,7 +39,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="protocol in filteredProtocol" :key="protocol.id">
+                                <tr v-for="protocol in displayedProtocol" :key="protocol.id">
                                     <td>{{ protocol.id }}</td>
                                     <td>{{ protocol.created_data }}</td>
                                     <td>{{ formatDeadline(protocol.created_data, protocol.deadline) }}</td>
@@ -65,12 +65,13 @@
                                     </td>
                                 </tr>
                             </tbody>
-                        </v-data-table>
+                        </v-table>
                         <v-card v-else>
                             <v-card-text class="flex justify-center items-center h-full">
                                 Nenhum protocolo encontrado!
                             </v-card-text>
                         </v-card>
+                        <v-pagination v-model="page" :length="pageCount"></v-pagination>
                     </v-card>
                 </v-container>
             </v-main>
@@ -127,6 +128,8 @@ const updateDeleteStatus = (value) => {
 
 
 const searchFilter = ref('');
+const page = ref(1);
+const itemPerPage = 10;
 
 const filteredProtocol = computed(() => {
     if (searchFilter.value !== '') {
@@ -138,6 +141,21 @@ const filteredProtocol = computed(() => {
     }
     return props.protocols.data;
 });
+
+const displayedProtocol = computed(() => {
+    const start = (page.value - 1) * itemPerPage;
+    const end = start + itemPerPage;
+    return filteredProtocol.value.slice(start, end);
+});
+
+const pageCount = computed(() => {
+    return Math.ceil(filteredProtocol.value.length / itemPerPage);
+});
+
+const updatePage = (newPage) => {
+    page.value = newPage;
+}
+
 
 
 const formatDeadline = (created_data, deadline) => {

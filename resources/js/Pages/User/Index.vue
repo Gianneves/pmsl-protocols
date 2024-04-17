@@ -15,7 +15,7 @@
                             <v-text-field label="Buscar" dense v-model="searchFilter" variant="outlined"></v-text-field>
                         </div>
                         <hr>
-                        <v-data-table v-if="protocols.data.length > 0">
+                        <v-table v-if="user.length > 0">
                             <thead>
                                 <tr>
                                     <th class="text-left">
@@ -36,29 +36,29 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="protocol in filteredProtocol" :key="protocol.id">
-                                    <td>id</td>
-                                    <td>email</td>
-                                    <td></td>
-                                    <td>perfil</td>
-                                    <td>ativo</td>
+                                <tr  v-for="user in displayedUser" :key="user.id">
+                                    <td>{{ user.id }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ user.profile }}</td>
+                                    <td>{{ user.active }}</td>
                                     <td>
                                         <div>
-                                            <Link :href="route('protocols.edit', protocol.id)">
+                                            
                                             <v-btn color="white">
                                                 <v-icon class="mdi mdi-eye" color="indigo"></v-icon>
                                             </v-btn>
-                                            </Link>
+                                            
                                         </div>
                                     </td>
                                 </tr>
                             </tbody>
-                        </v-data-table>
+                        </v-table>
                         <v-card v-else>
                             <v-card-text class="flex justify-center items-center h-full">
                                 Nenhum Usuário encontrado!
                             </v-card-text>
                         </v-card>
+                        <v-pagination v-model="page" :length="pageCount"></v-pagination>
                     </v-card>
                 </v-container>
             </v-main>
@@ -74,32 +74,37 @@ import { defineProps } from 'vue';
 import { ref, computed } from 'vue';
 
 
-
-const isDialogOpen = ref(false);
-const isDeleteProtocolOpen = ref(false);
-
-const props = defineProps({
-});
-
-
-
-
+const page = ref(1);
+const itemPerPage = 10;
 const searchFilter = ref('');
 
-const filteredProtocol = computed(() => {
-    if (searchFilter.value !== '') {
-        return props.protocols.data.filter(protocol =>
-            /*       protocol.id.includes(searchFilter.value) || */
-            protocol.created_data.includes(searchFilter.value) ||
-            protocol.deadline.includes(searchFilter.value) ||
-            protocol.person.name.toLowerCase().includes(searchFilter.value.toLowerCase()));
-    }
-    return props.protocols.data;
+const props = defineProps({
+    user: Array
 });
 
 
+const filteredUser = computed(() => {
+    if (searchFilter.value !== '') {
+        return props.user.filter(u =>
+            u.id.includes(searchFilter.value));
+    }
+    return props.user;
+});
 
 
+const displayedUser = computed(() => {
+    const start = (page.value - 1) * itemPerPage;
+    const end = start + itemPerPage;
+    return filteredUser.value.slice(start, end);
+});
+
+const pageCount = computed(() => {
+    return Math.ceil(filteredUser.value.length / itemPerPage);
+});
+
+const updatePage = (newPage) => {
+    page.value = newPage;
+}
 
 </script>
 
