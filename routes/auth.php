@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Middleware\CheckUserRole;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
 
@@ -55,7 +56,7 @@ Route::middleware('auth')->group(function () {
         ->name('logout');
 
     Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register')->middleware(HandlePrecognitiveRequests::class);
+        ->name('register')->middleware(HandlePrecognitiveRequests::class, CheckUserRole::class);
 
-    Route::post('register', [RegisteredUserController::class, 'store'])->middleware(HandlePrecognitiveRequests::class);
+    Route::post('register', [RegisteredUserController::class, 'store'])->middleware(HandlePrecognitiveRequests::class, CheckUserRole::class);
 });
