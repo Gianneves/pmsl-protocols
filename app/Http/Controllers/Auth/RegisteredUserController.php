@@ -40,7 +40,7 @@ class RegisteredUserController extends Controller
             return Inertia::render('dashboard');
         }
 
-        return Inertia::render('Auth/Register');
+        return Inertia::render('Auth/Register', compact('authProfile'));
     }
 
     /**

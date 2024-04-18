@@ -1,5 +1,5 @@
 <template>
-     <AuthenticatedLayout>
+    <AuthenticatedLayout>
 
         <Head title="Cadastrar" />
 
@@ -10,53 +10,66 @@
                     <v-form @submit.prevent="submit">
                         <div class="mt-4">
                             <v-text-field id="name" type="text" label="Nome Completo" v-model="form.name" required
-                                autofocus autocomplete="name" @change="form.validate('name')" variant="outlined"></v-text-field>
-                                <span v-if="form.invalid('name')" class="text-base text-red-500">
+                                autofocus autocomplete="name" @change="form.validate('name')"
+                                variant="outlined"></v-text-field>
+                            <span v-if="form.invalid('name')" class="text-base text-red-500">
                                 {{ form.errors.name }}
                             </span>
                         </div>
                         <div class="mt-4">
                             <v-text-field id="email" type="email" class="mt-1" label="Email" v-model="form.email"
-                                required autofocus autocomplete="email" @change="form.validate('email')" variant="outlined"></v-text-field>
-                                <span v-if="form.invalid('email')" class="text-base text-red-500">
+                                required autofocus autocomplete="email" @change="form.validate('email')"
+                                variant="outlined"></v-text-field>
+                            <span v-if="form.invalid('email')" class="text-base text-red-500">
                                 {{ form.errors.email }}
                             </span>
                         </div>
                         <div class="mt-4">
                             <v-text-field id="password" type="password" label="Senha" class="mt-1"
-                                v-model="form.password" required @change="form.validate('password')" autocomplete="current-password"
-                                variant="outlined"></v-text-field>
-                                <span v-if="form.invalid('password')" class="text-base text-red-500">
+                                v-model="form.password" required @change="form.validate('password')"
+                                autocomplete="current-password" variant="outlined"></v-text-field>
+                            <span v-if="form.invalid('password')" class="text-base text-red-500">
                                 {{ form.errors.password }}
                             </span>
                         </div>
 
                         <div class="mt-4">
                             <v-text-field id="password_confirmation" type="password" label="Confirmar Senha"
-                                v-model="form.password_confirmation" @change="form.validate('password_confirmation')"  required autocomplete="new-password"
-                                variant="outlined"></v-text-field>
-                                <span v-if="form.invalid('password_confirmation')" class="text-base text-red-500">
+                                v-model="form.password_confirmation" @change="form.validate('password_confirmation')"
+                                required autocomplete="new-password" variant="outlined"></v-text-field>
+                            <span v-if="form.invalid('password_confirmation')" class="text-base text-red-500">
                                 {{ form.errors.password_confirmation }}
                             </span>
                         </div>
-                        <div class="mt-4">
-                            <v-select id="profile"  label="Perfil" :items="['T', 'S', 'A']" v-model="form.profile" required
-                                autofocus autocomplete="profile" @change="form.validate('profile')" variant="outlined"></v-select>
-                                <span v-if="form.invalid('profile')" class="text-base text-red-500">
+                        <div class="mt-4" v-if="authProfile === 'T'">
+                            <v-select id="profile" label="Perfil" :items="['T', 'S', 'A']" v-model="form.profile"
+                                required autofocus autocomplete="profile" @change="form.validate('profile')"
+                                variant="outlined"></v-select>
+                            <span v-if="form.invalid('profile')" class="text-base text-red-500">
+                                {{ form.errors.profile }}
+                            </span>
+                        </div>
+                        <div class="mt-4" v-else>
+                            <v-select id="profile" label="Perfil" :items="['A']" v-model="form.profile" required
+                                autofocus autocomplete="profile" @change="form.validate('profile')"
+                                variant="outlined"></v-select>
+                            <span v-if="form.invalid('profile')" class="text-base text-red-500">
                                 {{ form.errors.profile }}
                             </span>
                         </div>
                         <div class="mt-4">
-                            <v-text-field id="cpf" type="text" label="CPF" v-model="form.cpf" @change="form.validate('cpf')" required autofocus
-                                autocomplete="cpf"  @input="formatCPF" v-mask="'###.###.###-##'" variant="outlined"></v-text-field>
-                                <span v-if="form.invalid('cpf')" class="text-base text-red-500">
+                            <v-text-field id="cpf" type="text" label="CPF" v-model="form.cpf"
+                                @change="form.validate('cpf')" required autofocus autocomplete="cpf" @input="formatCPF"
+                                v-mask="'###.###.###-##'" variant="outlined"></v-text-field>
+                            <span v-if="form.invalid('cpf')" class="text-base text-red-500">
                                 {{ form.errors.cpf }}
                             </span>
                         </div>
                         <div class="mt-4">
-                            <v-select id="active" :items="['S', 'N']" label="Ativo" v-model="form.active" @change="form.validate('active')" required autofocus
-                                autocomplete="active" variant="outlined"></v-select>
-                                <span v-if="form.invalid('active')" class="text-base text-red-500">
+                            <v-select id="active" :items="['S', 'N']" label="Ativo" v-model="form.active"
+                                @change="form.validate('active')" required autofocus autocomplete="active"
+                                variant="outlined"></v-select>
+                            <span v-if="form.invalid('active')" class="text-base text-red-500">
                                 {{ form.errors.active }}
                             </span>
                         </div>
@@ -90,6 +103,10 @@ import 'vue-toast-notification/dist/theme-sugar.css';
 
 const toast = useToast();
 
+const props = defineProps({
+    authProfile: Array
+});
+
 const form = useForm('post', route('register'), {
     name: '',
     email: '',
@@ -100,7 +117,7 @@ const form = useForm('post', route('register'), {
     active: ''
 });
 
-const submit = () => form.submit ({
+const submit = () => form.submit({
     preserveScroll: true,
     onSuccess: () => {
         form.reset();
@@ -117,10 +134,10 @@ const submit = () => form.submit ({
 
 
 const formatCPF = () => {
-    let cpf = form.cpf.replace(/\D/g, ''); 
-    cpf = cpf.replace(/^(\d{3})(\d)/, '$1.$2'); 
-    cpf = cpf.replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3'); 
-    cpf = cpf.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4'); 
+    let cpf = form.cpf.replace(/\D/g, '');
+    cpf = cpf.replace(/^(\d{3})(\d)/, '$1.$2');
+    cpf = cpf.replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
+    cpf = cpf.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
     form.cpf = cpf;
     form.validate('cpf');
 }
