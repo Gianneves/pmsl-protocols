@@ -14,6 +14,8 @@ use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
 
+use function Termwind\render;
+
 class RegisteredUserController extends Controller
 {
    
@@ -21,12 +23,23 @@ class RegisteredUserController extends Controller
     {
         $authUser = Auth::user();
         $user = User::all();
+
+        if($authUser->profile === 'A') {
+            return Inertia::render('dashboard');
+        }
+
         return Inertia::render('User/Index', compact('user', 'authUser'));
     }
 
 
     public function create(): Response
     {
+        $authProfile = Auth::user()->profile;
+
+        if($authProfile === 'A') {
+            return Inertia::render('dashboard');
+        }
+
         return Inertia::render('Auth/Register');
     }
 
@@ -79,4 +92,36 @@ class RegisteredUserController extends Controller
             abort(403, 'Unauthorized action.');
         }
     }
+
+    public function edit(User $user)
+    {
+        $authProfile = Auth::user()->profile;
+
+        if($authProfile === 'A') {
+            return Inertia::render('dashboard');
+        }
+        return Inertia::render('User/Edit', compact('user'));
+    }
+
+
+    public function update(UserCreateRequest $request, User $user)
+    {
+
+        $authProfile = Auth::user()->profile;
+
+        if($authProfile === 'A') {
+            return Inertia::render('dashboard');
+        }
+
+        $validatedData = $request->validated();
+        $user->update([
+            'name' => $validatedData['name'],
+            'profile' => $validatedData['profile'],
+            'active' => 'S'
+        ]);
+
+       
+        return redirect()->route('user.index');
+    }
+
 }

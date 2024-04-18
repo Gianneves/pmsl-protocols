@@ -1,4 +1,5 @@
 <template>
+
     <Head title="Usuários" />
     <v-app>
         <AuthenticatedLayout>
@@ -7,9 +8,9 @@
                     <v-card flat class="border mb-4" width="90%">
                         <div class="d-flex justify-space-between mt-5">
                             <v-card-title>Usuários</v-card-title>
-                            <v-card-title v-if="authUser.profile == 'T' || authUser.profile == 'S'" >
-                                <Link :href="route('user.create')">
-                                    <v-btn>Cadastrar Usuário</v-btn>
+                            <v-card-title v-if="authUser.profile == 'T' || authUser.profile == 'S'">
+                                <Link :href="route('register')">
+                                <v-btn>Cadastrar Usuário</v-btn>
                                 </Link>
                             </v-card-title>
                         </div>
@@ -38,18 +39,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr  v-for="user in displayedUser" :key="user.id">
+                                <tr v-for="user in displayedUser" :key="user.id">
                                     <td>{{ user.id }}</td>
                                     <td>{{ user.email }}</td>
                                     <td>{{ formatedProfile(user.profile) }}</td>
                                     <td>{{ user.active }}</td>
                                     <td>
                                         <div>
-                                            
-                                            <v-btn color="white">
-                                                <v-icon class="mdi mdi-eye" color="indigo"></v-icon>
-                                            </v-btn>
-                                            
+                                            <Link :href="route('user.edit', {user: user.id})" >
+                                                <v-btn color="white">
+                                                    <v-icon class="mdi mdi-eye" color="indigo"></v-icon>
+                                                 </v-btn>
+                                            </Link>
                                         </div>
                                     </td>
                                 </tr>
@@ -86,9 +87,9 @@ const props = defineProps({
 });
 
 const formatedProfile = (profile) => {
-    if(profile === 'T') return 'Administrador TI'
-    if(profile === 'S') return 'Administrador Sistema'
-    if(profile === 'A') return 'Atendente'
+    if (profile === 'T') return 'Administrador TI'
+    if (profile === 'S') return 'Administrador Sistema'
+    if (profile === 'A') return 'Atendente'
 }
 
 const filteredUser = computed(() => {

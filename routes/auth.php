@@ -56,7 +56,9 @@ Route::middleware('auth')->group(function () {
         ->name('logout');
 
     Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register')->middleware(HandlePrecognitiveRequests::class, CheckUserRole::class);
+        ->name('register')->middleware(HandlePrecognitiveRequests::class);
 
-    Route::post('register', [RegisteredUserController::class, 'store'])->middleware(HandlePrecognitiveRequests::class, CheckUserRole::class);
+    Route::post('register', [RegisteredUserController::class, 'store'])->middleware(HandlePrecognitiveRequests::class);
+    
+   
 });

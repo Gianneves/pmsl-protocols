@@ -93,7 +93,7 @@ const form = useForm('put', route('protocols.update', { id: props.protocol.id })
     created_data: props.protocol?.created_data,
     deadline: props.protocol?.deadline,
     person_id: props.protocol?.person_id,
-    files: ''
+    files: []
 });
 
 

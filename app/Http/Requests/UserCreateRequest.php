@@ -22,6 +22,14 @@ class UserCreateRequest extends FormRequest
      */
     public function rules(): array
     {
+
+        if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
+            return [
+                'name' => 'required|min:3|max:255',
+                'profile' => 'required|string|size:1|in:T,S,A',
+            ];
+        }
+
         return [
             'name' => 'required|min:3|max:255',
             'email' => 'required|string|email|max:255|unique:users',
