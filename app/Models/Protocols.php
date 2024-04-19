@@ -9,9 +9,13 @@ class Protocols extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['description', 'created_data', 'deadline', 'person_id', 'files'];
+    protected $fillable = ['description', 'created_data', 'deadline', 'person_id', 'departament_id', 'files'];
 
     public function person() {
         return $this->belongsTo(Person::class, 'person_id');
+    }
+
+    public function departaments() {
+        return $this->belongsTo(Departaments::class);
     }
 }

@@ -35,7 +35,7 @@ const submit = () => {
         <Head title="Login" />
         <v-main class="d-flex mt-5">
             <v-container class="d-flex align-center justify-center" style="height: 100vh;" >
-                <v-card  class="border d-flex flex-col text-center custom-card" width="40%">
+                <v-card  class="border d-flex flex-col text-center custom-card" width="35%">
                     <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
                         {{ status }}
                     </div>

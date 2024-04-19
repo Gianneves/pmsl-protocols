@@ -4,6 +4,7 @@ use App\Http\Controllers\PersonController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProtocolsController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\DepartamentsController;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('person', PersonController::class)->middleware(HandlePrecognitiveRequests::class);
     Route::resource('protocols', ProtocolsController::class)->middleware(HandlePrecognitiveRequests::class);
     Route::resource('user', RegisteredUserController::class)->middleware(HandlePrecognitiveRequests::class);
+    Route::resource('departamentos', DepartamentsController::class)->middleware(HandlePrecognitiveRequests::class);
 
 });
 
