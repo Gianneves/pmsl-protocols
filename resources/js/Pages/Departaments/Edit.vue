@@ -2,7 +2,7 @@
     <v-app>
         <AuthenticatedLayout>
             <v-card class="card-container" width="900px">
-                <v-card-title class="text-center">Editar Protocolo</v-card-title>
+                <v-card-title class="text-center">Editar Departamento</v-card-title>
                 <v-form>
                     <v-container>
                         <v-row>
