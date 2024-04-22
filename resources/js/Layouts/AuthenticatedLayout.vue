@@ -31,7 +31,7 @@ const isDrawerOpen = ref(false);
                     <Link :href="route('protocols.index')">Protocolos</Link>
                 </v-list-item>
                 <v-list-item prepend-icon="mdi mdi-bank-circle">
-                    <Link :href="route('departamentos.index')">Departamentos</Link>
+                    <Link :href="route('departaments.index')">Departamentos</Link>
                 </v-list-item>
                 <v-list-item prepend-icon="mdi-account-group">
                     <Link :href="route('user.index')">Usuários</Link>

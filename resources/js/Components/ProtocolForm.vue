@@ -25,10 +25,19 @@
 
                         <v-col cols="12" md="4">
                             <v-select label="Contribuinte" v-model="form.person_id" @change="form.validate('person_id')"
-                                :items="people" item-title="name" item-value="id">
+                                :items="people" item-title="name" item-value="id" required>
                             </v-select>
                             <span v-if="form.invalid('person_id')" class="text-base text-red-500">
                                 {{ form.errors.person_id }}
+                            </span>
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-select label="Departamento" v-model="form.departament_id" @change="form.validate('departament_id')"
+                                :items="departament" item-title="name" item-value="id" required>
+                            </v-select>
+                            <span v-if="form.invalid('departament_id')" class="text-base text-red-500">
+                                {{ form.errors.departament_id }}
                             </span>
                         </v-col>
 
@@ -78,7 +87,8 @@ const form = useForm('post', route('protocols.store'), {
     created_data: '',
     deadline: '',
     person_id: '',
-    files: ''
+    departament_id: '', 
+    files: []
 });
 
 const submit = () => form.submit({
@@ -101,7 +111,8 @@ const submit = () => form.submit({
 
 const props = defineProps({
     isDialogOpen: Boolean,
-    people: Array
+    people: Array,
+    departament: Array
 });
 
 </script>

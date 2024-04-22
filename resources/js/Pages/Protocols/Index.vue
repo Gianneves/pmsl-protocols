@@ -10,7 +10,7 @@
                                 <v-btn @click="isDialogOpen = true">Cadastrar</v-btn>
                                 <v-dialog v-model="isDialogOpen" @update:modelValue="updateDialogStatus" width="900px">
                                     <ProtocolForm :isDialogOpen="isDialogOpen" @closeDialog="closeDialog"
-                                        :people="people" />
+                                        :people="people" :departament="departament" />
                                 </v-dialog>
                             </v-card-title>
                         </div>
@@ -34,6 +34,9 @@
                                         Nome do Contribuinte
                                     </th>
                                     <th class="text-left">
+                                        Departamento
+                                    </th>
+                                    <th class="text-left">
                                         Ações:
                                     </th>
                                 </tr>
@@ -44,6 +47,7 @@
                                     <td>{{ protocol.created_data }}</td>
                                     <td>{{ formatDeadline(protocol.created_data, protocol.deadline) }}</td>
                                     <td>{{ protocol.person.name }}</td>
+                                    <td>{{ protocol.departaments.name }}</td>
                                     <td>
                                         <div>
                                             <Link :href="route('protocols.edit', protocol.id)">
@@ -99,8 +103,11 @@ const isDeleteProtocolOpen = ref(false);
 
 const props = defineProps({
     protocols: Object,
-    people: Array
+    people: Array,
+    departament: Array,
+    authUser: Array
 });
+
 
 
 const selectedProtocol = ref(null);

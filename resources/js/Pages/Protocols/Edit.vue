@@ -27,12 +27,22 @@
                             <v-col cols="12" md="6" class="input-col">
                                 <v-select label="Contribuinte" v-model="form.person_id"
                                     @change="form.validate('person_id')" :items="people" item-title="name"
-                                    item-value="id">
+                                    item-value="id" required>
                                 </v-select>
                                 <span v-if="form.invalid('person_id')" class="text-base text-red-500">
                                     {{ form.errors.person_id }}
                                 </span>
                             </v-col>
+
+                            <v-col cols="12" md="4">
+                            <v-select label="Departamento" v-model="form.departament_id" @change="form.validate('departament_id')"
+                                :items="departament" item-title="name" item-value="id" required>
+                            </v-select>
+                            <span v-if="form.invalid('departament_id')" class="text-base text-red-500">
+                                {{ form.errors.departament_id }}
+                            </span>
+                        </v-col>
+
                             <v-col cols="12" md="6" class="input-col">
                                 <v-textarea label="Descrição" id="description" v-model="form.description" required
                                     variant="outlined" maxlength="2000" @change="form.validate('description')">
@@ -61,7 +71,7 @@
                     </v-container>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn variant="tonal" @click="submit" color="success">Editar</v-btn>
+                        <v-btn variant="tonal" @click="submit" color="success">Salvar</v-btn>
                     </v-card-actions>
                 </v-form>
             </v-card>
@@ -84,6 +94,7 @@ const toast = useToast();
 const props = defineProps({
     people: Array,
     protocol: Object,
+    departament: Array
 });
 
 
@@ -93,6 +104,7 @@ const form = useForm('put', route('protocols.update', { id: props.protocol.id })
     created_data: props.protocol?.created_data,
     deadline: props.protocol?.deadline,
     person_id: props.protocol?.person_id,
+    departament_id: props.protocol?.departament_id,
     files: []
 });
 

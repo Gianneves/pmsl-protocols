@@ -32,12 +32,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="dep in displayedDepartament" :key="dep.id">
-                                    <td>{{ dep.id }}</td>
-                                    <td>{{ dep.name }}</td>
+                                <tr v-for="departament in displayedDepartament" :key="departament.id">
+                                    <td>{{ departament.id }}</td>
+                                    <td>{{ departament.name }}</td>
                                     <td>
                                         <div>
-                                            <Link :href="route('departamentos.edit', dep.id)">
+                                            <Link :href="route('departaments.edit', departament.id)">
                                             <v-btn color="white">
                                                 <v-icon class="mdi mdi-eye" color="indigo"></v-icon>
                                             </v-btn>

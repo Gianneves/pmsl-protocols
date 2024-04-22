@@ -34,7 +34,7 @@ import 'vue-toast-notification/dist/theme-sugar.css';
 const toast = useToast();
 const emit = defineEmits(['closeDialog']);
 
-const form = useForm('post', route('departamentos.store'), {
+const form = useForm('post', route('departaments.store'), {
     name: '',
 });
 

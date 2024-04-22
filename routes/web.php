@@ -27,7 +27,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('person', PersonController::class)->middleware(HandlePrecognitiveRequests::class);
     Route::resource('protocols', ProtocolsController::class)->middleware(HandlePrecognitiveRequests::class);
     Route::resource('user', RegisteredUserController::class)->middleware(HandlePrecognitiveRequests::class);
-    Route::resource('departamentos', DepartamentsController::class)->middleware(HandlePrecognitiveRequests::class);
+    Route::resource('departaments', DepartamentsController::class)->middleware(HandlePrecognitiveRequests::class);
+    Route::post('departaments/{departament}/permission', [DepartamentsController::class, 'grantPermission'])->name('departaments.permission');
+    Route::delete('departaments/{departament}/permission/{access}', [DepartamentsController::class, 'deletePermission'])->name('departaments.deletePermission');
 
 });
 

@@ -16,6 +16,6 @@ class Protocols extends Model
     }
 
     public function departaments() {
-        return $this->belongsTo(Departaments::class);
+        return $this->belongsTo(Departaments::class, 'departament_id');
     }
 }

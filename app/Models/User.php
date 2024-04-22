@@ -25,6 +25,10 @@ class User extends Authenticatable
         'active'
     ];
 
+    public function grantAccess() {
+        return $this->hasMany(GrantAccess::class);
+    }
+
     
     /**
      * The attributes that should be hidden for serialization.

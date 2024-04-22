@@ -21,6 +21,7 @@ class ProtocolsResource extends JsonResource
             'created_data' => Carbon::parse($this->created_data)->format('d/m/Y'),
             'deadline' => $this->deadline,
             'person' => new PersonResource($this->whenLoaded('person')),
+            'departaments' => new DepartamentsResource($this->whenLoaded('departaments')),
             'files' => $this->files
         ];
     }

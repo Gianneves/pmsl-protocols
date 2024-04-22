@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProtocolsRequest;
-use App\Http\Resources\PersonResource;
 use App\Http\Resources\ProtocolsResource;
+use App\Models\Departaments;
 use App\Models\Person;
 use App\Models\Protocols;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
-use Psy\Readline\Hoa\Protocol;
+
 
 class ProtocolsController extends Controller
 {
@@ -20,9 +20,11 @@ class ProtocolsController extends Controller
      */
     public function index()
     {
+        $authUser = Auth::user();
         $people = Person::get(['id', 'name']);
-        $protocols = ProtocolsResource::collection(Protocols::with('person')->get());
-        return Inertia::render('Protocols/Index', compact('protocols', 'people'));
+        $departament = Departaments::get(['id', 'name']);
+        $protocols = ProtocolsResource::collection(Protocols::with('person', 'departaments')->get());
+        return Inertia::render('Protocols/Index', compact('protocols', 'people', 'departament', 'authUser'));
     }
 
     /**
@@ -47,6 +49,7 @@ class ProtocolsController extends Controller
             'created_data' => $validatedData['created_data'],
             'deadline' => $validatedData['deadline'],
             'person_id' => $validatedData['person_id'],
+            'departament_id' => $validatedData['departament_id'],
             'files' => '',
         ]);
 
@@ -78,7 +81,8 @@ class ProtocolsController extends Controller
     public function edit(Protocols $protocol)
     {
         $people = Person::all();
-        return Inertia::render('Protocols/Edit', compact('protocol', 'people'));
+        $departament = Departaments::all();
+        return Inertia::render('Protocols/Edit', compact('protocol', 'people', 'departament'));
     }
 
     /**
@@ -93,6 +97,7 @@ class ProtocolsController extends Controller
             'created_data' => $validatedData['created_data'],
             'deadline' => $validatedData['deadline'],
             'person_id' => $validatedData['person_id'],
+            'departament_id' => $validatedData['departament_id']
         ]);
     
         if ($request->hasFile('files')) {
@@ -120,7 +125,6 @@ class ProtocolsController extends Controller
                 $filePath = 'protocols/' . trim($file);
                 
                 if (Storage::exists($filePath)) {
-                    // Delete the file
                     Storage::delete($filePath);
                 }
             }

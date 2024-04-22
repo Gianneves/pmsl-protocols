@@ -36,6 +36,7 @@ class ProtocolsRequest extends FormRequest
                     $query->where('birthdate', '<', $minAge);
                 }),
             ],
+            'departament_id' => 'required',
             'files.*' => 'sometimes|file|mimes:jpg,jpeg,png,pdf|max:3000',
             'files' => 'max:5' 
         ];
