@@ -18,4 +18,12 @@ class Protocols extends Model
     public function departaments() {
         return $this->belongsTo(Departaments::class, 'departament_id');
     }
+
+    public function attendances() {
+        return $this->hasMany(Attendance::class, 'protocol_id');
+    }
+
+    public function latestAttendanceSituation() {
+        return $this->attendances()->latest()->value('situation');
+    }
 }

@@ -5,6 +5,24 @@
             <Head title="Editar protocolo" />
             <v-card class="card-container" width="900px">
                 <v-card-title class="text-center">Editar Protocolo</v-card-title>
+                <v-container class="d-flex justify-between m-3">
+                    <div>
+                        <v-btn @click="isDialogOpen = true">Acompanhamento</v-btn>
+                        <v-dialog v-model="isDialogOpen" @update:modelValue="updateDialogStatus">
+                            <AttendanceModal :isDialogOpen="isDialogOpen" @closeDialog="closeDialog"
+                                :protocol="protocol" />
+                        </v-dialog>
+                    </div>
+                    <div v-if="attendance.length > 0">
+                        <v-btn @click="isRegisterOpen = true">
+                            <v-icon dark class="mdi mdi-file-document-multiple"></v-icon>
+                        </v-btn>
+                        <v-dialog v-model="isRegisterOpen" @update:modelValue="updateRegisterStatus">
+                            <RegisterModal :isRegisterOpen="isRegisterOpen" @closeRegister="closeRegister"
+                                :attendance="attendance" />
+                        </v-dialog>
+                    </div>
+                </v-container>
                 <v-form @submit.prevent="submit">
                     <v-container>
                         <v-row>
@@ -35,13 +53,14 @@
                             </v-col>
 
                             <v-col cols="12" md="4">
-                            <v-select label="Departamento" v-model="form.departament_id" @change="form.validate('departament_id')"
-                                :items="departament" item-title="name" item-value="id" required>
-                            </v-select>
-                            <span v-if="form.invalid('departament_id')" class="text-base text-red-500">
-                                {{ form.errors.departament_id }}
-                            </span>
-                        </v-col>
+                                <v-select label="Departamento" v-model="form.departament_id"
+                                    @change="form.validate('departament_id')" :items="departament" item-title="name"
+                                    item-value="id" required>
+                                </v-select>
+                                <span v-if="form.invalid('departament_id')" class="text-base text-red-500">
+                                    {{ form.errors.departament_id }}
+                                </span>
+                            </v-col>
 
                             <v-col cols="12" md="6" class="input-col">
                                 <v-textarea label="Descrição" id="description" v-model="form.description" required
@@ -55,9 +74,9 @@
                                 <v-card-title v-if="props.protocol.files">
                                     Arquivos:
 
-                                 
+
                                 </v-card-title>
-                       <!--          <div v-else>
+                                <!--          <div v-else>
                                     <v-file-input label="Anexar arquivos" id="files" v-model="form.files"
                                         variant="outlined" multiple maxlength="2000" style="width: 300px;"
                                         @change="form.validate('files')">
@@ -75,7 +94,6 @@
                     </v-card-actions>
                 </v-form>
             </v-card>
-
         </AuthenticatedLayout>
     </v-app>
 </template>
@@ -83,21 +101,39 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
-
+import AttendanceModal from '@/Components/AttendanceModal.vue';
+import RegisterModal from '@/Components/RegisterModal.vue';
 import { useForm } from 'laravel-precognition-vue-inertia';
 import { defineProps, ref } from 'vue';
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 
 const toast = useToast();
+const isDialogOpen = ref(false);
+const isRegisterOpen = ref(false);
 
 const props = defineProps({
     people: Array,
     protocol: Object,
-    departament: Array
+    departament: Array,
+    attendance: Array
 });
 
+const updateDialogStatus = (value) => {
+    isDialogOpen.value = value;
+};
 
+const closeDialog = () => {
+    isDialogOpen.value = false;
+};
+
+const updateRegisterStatus = (value) => {
+    isRegisterOpen.value = value;
+};
+
+const closeRegister = () => {
+    isRegisterOpen.value = false;
+};
 
 const form = useForm('put', route('protocols.update', { id: props.protocol.id }), {
     description: props.protocol?.description,
@@ -108,11 +144,9 @@ const form = useForm('put', route('protocols.update', { id: props.protocol.id })
     files: []
 });
 
-
 const submit = () => form.submit({
     preserveScroll: true,
     onSuccess: () => {
-        form.reset();
         toast.success("Protocolo editado com Sucesso!", {
             position: 'top-right',
         });
@@ -124,6 +158,7 @@ const submit = () => form.submit({
     }
 });
 
+
 </script>
 
 
@@ -131,5 +166,7 @@ const submit = () => form.submit({
 .card-container {
     margin-top: 100px;
     margin-left: 300px;
+    background-color: #FFF;
+    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.5);
 }
 </style>

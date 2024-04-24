@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProtocolsRequest;
 use App\Http\Resources\ProtocolsResource;
+use App\Models\Attendance;
 use App\Models\Departaments;
 use App\Models\Person;
 use App\Models\Protocols;
@@ -23,7 +24,7 @@ class ProtocolsController extends Controller
         $authUser = Auth::user();
         $people = Person::get(['id', 'name']);
         $departament = Departaments::get(['id', 'name']);
-        $protocols = ProtocolsResource::collection(Protocols::with('person', 'departaments')->get());
+        $protocols = ProtocolsResource::collection(Protocols::with('person', 'departaments', 'attendances')->get());
         return Inertia::render('Protocols/Index', compact('protocols', 'people', 'departament', 'authUser'));
     }
 
@@ -40,10 +41,8 @@ class ProtocolsController extends Controller
      */
     public function store(ProtocolsRequest $request)
     {
-
         $validatedData = $request->validated();
-
-      
+    
         $protocol = Protocols::create([
             'description' => $validatedData['description'],
             'created_data' => $validatedData['created_data'],
@@ -53,6 +52,12 @@ class ProtocolsController extends Controller
             'files' => '',
         ]);
 
+
+        Attendance::create([
+            'protocol_id' => $protocol->id,
+            'situation' => 'A'
+        ]);
+    
         if($protocol) {
             if ($request->hasFile('files')) {
                 $fileNames = [];
@@ -80,9 +85,10 @@ class ProtocolsController extends Controller
      */
     public function edit(Protocols $protocol)
     {
+        $attendance = Attendance::all();
         $people = Person::all();
         $departament = Departaments::all();
-        return Inertia::render('Protocols/Edit', compact('protocol', 'people', 'departament'));
+        return Inertia::render('Protocols/Edit', compact('protocol', 'people', 'departament', 'attendance'));
     }
 
     /**
@@ -131,6 +137,6 @@ class ProtocolsController extends Controller
         }
 
         $protocol->delete();
-        Redirect::back();
+        return response()->json(['message' => 'Protocolo excluído com sucesso'], 200);
     }
 }

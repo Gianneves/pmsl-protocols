@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProtocolsController;
@@ -30,7 +31,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('departaments', DepartamentsController::class)->middleware(HandlePrecognitiveRequests::class);
     Route::post('departaments/{departament}/permission', [DepartamentsController::class, 'grantPermission'])->name('departaments.permission');
     Route::delete('departaments/{departament}/permission/{access}', [DepartamentsController::class, 'deletePermission'])->name('departaments.deletePermission');
-
+    Route::resource('attendances', AttendanceController::class)->middleware(HandlePrecognitiveRequests::class);
 });
 
 require __DIR__ . '/auth.php';

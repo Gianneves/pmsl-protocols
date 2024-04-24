@@ -9,14 +9,16 @@ use App\Models\Departaments;
 use App\Models\GrantAccess;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class DepartamentsController extends Controller
 {
     public function index() {
+        $authUser = Auth::user();
         $departament = DepartamentsResource::collection(Departaments::all());
-        return Inertia::render('Departaments/Index', compact('departament'));
+        return Inertia::render('Departaments/Index', compact('departament', 'authUser'));
     }
 
 
@@ -31,9 +33,10 @@ class DepartamentsController extends Controller
     }
 
     public function edit(Departaments $departament) {
+        $authUser = Auth::user();
         $users = User::all();
         $grantAccess = GrantAccess::with('user')->where('departament_id', $departament->id)->get();
-        return Inertia::render('Departaments/Edit', compact('departament','users', 'grantAccess'));
+        return Inertia::render('Departaments/Edit', compact('departament','users', 'grantAccess', 'authUser'));
     }
 
     public function grantPermission(Departaments $departament, GrantAccessRequest $request) {

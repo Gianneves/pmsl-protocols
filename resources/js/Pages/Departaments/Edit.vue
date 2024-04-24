@@ -3,7 +3,7 @@
         <AuthenticatedLayout>
             <v-card class="card-container" width="900px">
                 <v-card-title class="text-center">Editar Departamento</v-card-title>
-                <v-form @submit.prevent="grantPermission">
+                <v-form @submit.prevent="grantPermission" v-if="authUser.profile === 'T' || authUser.profile === 'S'">
                     <v-container>
                         <v-row>
                             <v-col cols="12" md="6" class="input-col">
@@ -22,7 +22,7 @@
                 </v-form>
                 <v-container>
                     <div class="mt-3 mb-3" v-if="grantAccess.length > 0">
-                        <v-card-text>Usuários com acesso:</v-card-text>
+                        <v-card-text class="mt-3 ml-5 font-weight-bold">Usuários com acesso:</v-card-text>
                         <v-card class="m-1 border-style">
                             <ul class="d-flex justify-between px-3 my-2 ml-2" v-for="access in grantAccess" :key="access.id">
                                 <div class="d-flex flex-row" >
@@ -30,7 +30,7 @@
                                     <li class="mr-3"><b>Nome do Usuário:</b> {{ access.user.name }}</li>
                                     <li><b>Data de Liberação:</b> {{ formatData(access.user.created_at) }}</li>
                                 </div>
-                                <div>
+                                <div v-if="authUser.profile === 'T' || authUser.profile === 'S'">
                                     <v-btn color="red" dark class="ml-3 delete-btn" @click="deleteAccess(access.id)" >
                                         <v-icon dark class="mdi mdi-delete-forever md-2"></v-icon>
                                     </v-btn>
@@ -78,7 +78,8 @@ const toast = useToast();
 const props = defineProps({
     users: Array,
     departament: Object,
-    grantAccess: Array
+    grantAccess: Array,
+    authUser: Array
 });
 
 
@@ -162,11 +163,13 @@ const deleteAccess = (accessId) => {
     margin-top: 100px;
     margin-left: 300px;
     padding: 20px;
+    background-color: #FFF;
+    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.5);
 }
 
 .border-style {
     background-color: #FFF;
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 
 .delete-btn {

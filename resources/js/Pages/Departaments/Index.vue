@@ -6,7 +6,7 @@
                     <v-card flat class="border mb-4" width="90%">
                         <div class="d-flex justify-space-between mt-5">
                             <v-card-title>Departamentos</v-card-title>
-                            <v-card-title>
+                            <v-card-title v-if="authUser.profile === 'T' || authUser.profile === 'S'">
                                 <v-btn @click="isDialogOpen = true">Cadastrar</v-btn>
                                 <v-dialog v-model="isDialogOpen" @update:modelValue="updateDialogStatus" width="500px">
                                     <DepartamentForm :isDialogOpen="isDialogOpen" @closeDialog="closeDialog" />
@@ -85,7 +85,8 @@ const closeDialog = () => {
 
 
 const props = defineProps({
-    departament: Object
+    departament: Object,
+    authUser: Array
 });
 
 

@@ -37,6 +37,9 @@
                                         Departamento
                                     </th>
                                     <th class="text-left">
+                                        Situação
+                                    </th>
+                                    <th class="text-left">
                                         Ações:
                                     </th>
                                 </tr>
@@ -48,6 +51,10 @@
                                     <td>{{ formatDeadline(protocol.created_data, protocol.deadline) }}</td>
                                     <td>{{ protocol.person.name }}</td>
                                     <td>{{ protocol.departaments.name }}</td>
+                                    <td>
+                                        <div :class="getSituationStyle(protocol.latest_attendance_situation)"></div>
+                                        {{ getSituationName(protocol.latest_attendance_situation) }}
+                                    </td>
                                     <td>
                                         <div>
                                             <Link :href="route('protocols.edit', protocol.id)">
@@ -105,9 +112,7 @@ const props = defineProps({
     protocols: Object,
     people: Array,
     departament: Array,
-    authUser: Array
 });
-
 
 
 const selectedProtocol = ref(null);
@@ -189,6 +194,33 @@ const formatDeadline = (created_data, deadline) => {
 }
 
 
+const getSituationName = (situation) => {
+    switch (situation) {
+        case 'A':
+            return 'Aberto';
+        case 'E':
+            return 'Em atendimento'; 
+        case 'S':
+            return 'Solucionado'; 
+        default:
+            return ''; 
+    }
+}
+
+const getSituationStyle = (situation) => {
+    switch (situation) {
+        case 'A':
+            return 'situation-red';
+        case 'E':
+            return 'situation-yellow';
+        case 'S':
+            return 'situation-green ';
+        default:
+            return ''; 
+    }
+};
+
+
 </script>
 
 <style scoped>
@@ -197,5 +229,30 @@ const formatDeadline = (created_data, deadline) => {
     margin-left: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+
+.situation-green {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: green;
+}
+
+.situation-yellow {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: yellow;
+}
+
+.situation-red {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
 }
 </style>
