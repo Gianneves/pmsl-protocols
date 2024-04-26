@@ -1,7 +1,14 @@
 <template>
+    <Head title="Editar Departamento" />
     <v-app>
         <AuthenticatedLayout>
-            <v-card class="card-container" width="900px">
+            <v-main>
+                <div class="mt-5 ml-5">
+                    <Link :href="route('departaments.index')">
+                        <v-btn rounded outlined color="indigo">Voltar</v-btn>
+                    </Link>
+                </div>
+                <v-card class="card-container" width="900px">
                 <v-card-title class="text-center">Editar Departamento</v-card-title>
                 <v-form @submit.prevent="grantPermission" v-if="authUser.profile === 'T' || authUser.profile === 'S'">
                     <v-container>
@@ -59,15 +66,17 @@
                     </v-card-actions>
                 </v-form>
             </v-card>
+            </v-main>
         </AuthenticatedLayout>
     </v-app>
 </template>
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head, Link } from '@inertiajs/vue3';
 import { useForm } from 'laravel-precognition-vue-inertia';
 import { computed } from 'vue';
-import { defineProps, ref } from 'vue';
+import { defineProps } from 'vue';
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 import axios from 'axios';
@@ -160,7 +169,7 @@ const deleteAccess = (accessId) => {
 
 <style scoped>
 .card-container {
-    margin-top: 100px;
+    margin-top: 60px;
     margin-left: 300px;
     padding: 20px;
     background-color: #FFF;

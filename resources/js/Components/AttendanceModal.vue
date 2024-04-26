@@ -1,20 +1,19 @@
 <template>
-    <v-card>
+    <v-card class="card-container">
         <v-card-title class="text-center">Acompanhamento</v-card-title>
         <v-form @submit.prevent="attendanceSubmit">
-            <v-container>
+            <v-container fluid>
                 <v-row>
                     <v-col cols="12" md="6" class="input-col">
-                        <v-text-field label="Descrição" type="text" v-model="attendanceForm.description"
-                            maxlength="2000" variant="outlined" @change="attendanceForm.validate('description')">
-                        </v-text-field>
+                        <v-textarea label="Descrição" type="text" v-model="attendanceForm.description" variant="outlined"
+                            maxlength="2000" :width="400" @change="attendanceForm.validate('description')">
+                        </v-textarea>
                         <span v-if="attendanceForm.invalid('description')" class="text-base text-red-500">
                             {{ attendanceForm.errors.description }}
                         </span>
                     </v-col>
-
                     <v-col cols="12" md="6" class="input-col">
-                        <v-select label="Situação" v-model="attendanceForm.situation"
+                        <v-select label="Situação" v-model="attendanceForm.situation" variant="outlined"
                             @change="attendanceForm.validate('situation')" :items="['A', 'E', 'S']" required>
                         </v-select>
                         <span v-if="attendanceForm.invalid('situation')" class="text-base text-red-500">
@@ -70,3 +69,12 @@ const attendanceSubmit = () => attendanceForm.submit({
 });
 
 </script>
+
+
+<style scoped>
+
+.card-container {
+    background-color: #FFF;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+}
+</style>

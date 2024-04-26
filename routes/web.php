@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AuditController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProtocolsController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DepartamentsController;
+use App\Http\Controllers\PdfController;
+use App\Models\Audit;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +35,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('departaments/{departament}/permission', [DepartamentsController::class, 'grantPermission'])->name('departaments.permission');
     Route::delete('departaments/{departament}/permission/{access}', [DepartamentsController::class, 'deletePermission'])->name('departaments.deletePermission');
     Route::resource('attendances', AttendanceController::class)->middleware(HandlePrecognitiveRequests::class);
+    Route::get('pdf/protocolPdf', [PdfController::class, 'protocolPdf'])->name('pdf.protocolPdf');
+    Route::get('pdf/{id}/', [PdfController::class, 'attendancePdf'])->name('pdf.attendancePdf');
+    Route::resource('audit', AuditController::class);
 });
 
 require __DIR__ . '/auth.php';

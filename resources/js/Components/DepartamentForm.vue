@@ -3,7 +3,7 @@
         <v-card-text>
             <v-card-title>Cadastrar Departamento</v-card-title>
             <v-form @submit.prevent="submit">
-                <v-container>
+                <v-container fuid>
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-text-field class="w-full md:w-96" label="Nome" id="name" v-model="form.name" @change="form.validate('name')"

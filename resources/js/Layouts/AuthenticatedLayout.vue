@@ -36,7 +36,9 @@ const isDrawerOpen = ref(false);
                 <v-list-item prepend-icon="mdi-account-group">
                     <Link :href="route('user.index')">Usuários</Link>
                 </v-list-item>
-                <v-list-item prepend-icon="mdi-cog-outline">Auditoria</v-list-item>
+                <v-list-item prepend-icon="mdi mdi-target-account">
+                    <Link :href="route('audit.index')">Auditoria</Link>
+                </v-list-item>
             </v-list>
 
         </v-navigation-drawer>

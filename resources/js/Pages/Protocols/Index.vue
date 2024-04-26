@@ -1,19 +1,26 @@
 <template>
     <v-app>
         <AuthenticatedLayout>
-            <v-main class="d-flex">
+            <v-main>
                 <v-container class="container">
-                    <v-card flat class="border mb-4" width="90%">
-                        <div class="d-flex justify-space-between mt-5">
-                            <v-card-title>Protocolos</v-card-title>
-                            <v-card-title>
+                    <v-card flat class="border" width="90%">
+                        <div class="d-flex justify-space-between my-5 mx-5">
+                            <div>
+                                <v-btn color="indigo">
+                                    <a href="pdf/protocolPdf">
+                                        <v-icon icon="mdi-download-outline" class="mr-3"></v-icon> Gerar PDF
+                                    </a>
+                                </v-btn>
+                            </div>
+                            <div>
                                 <v-btn @click="isDialogOpen = true">Cadastrar</v-btn>
                                 <v-dialog v-model="isDialogOpen" @update:modelValue="updateDialogStatus" width="900px">
                                     <ProtocolForm :isDialogOpen="isDialogOpen" @closeDialog="closeDialog"
                                         :people="people" :departament="departament" />
                                 </v-dialog>
-                            </v-card-title>
+                            </div>
                         </div>
+                        <v-card-title>Protocolos</v-card-title>
                         <div class="input-search">
                             <v-text-field label="Buscar" dense v-model="searchFilter" variant="outlined"></v-text-field>
                         </div>
@@ -199,11 +206,11 @@ const getSituationName = (situation) => {
         case 'A':
             return 'Aberto';
         case 'E':
-            return 'Em atendimento'; 
+            return 'Em atendimento';
         case 'S':
-            return 'Solucionado'; 
+            return 'Solucionado';
         default:
-            return ''; 
+            return '';
     }
 }
 
@@ -216,7 +223,7 @@ const getSituationStyle = (situation) => {
         case 'S':
             return 'situation-green ';
         default:
-            return ''; 
+            return '';
     }
 };
 

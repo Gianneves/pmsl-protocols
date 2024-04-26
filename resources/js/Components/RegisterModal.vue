@@ -1,20 +1,21 @@
 <template>
-    <v-card>
-        <v-card-title>
-            Registro de acompanhamento
-        </v-card-title>
-        <v-container>
-            <ul v-for="register in attendance" :key="register.id" class="mx-3 my-4">
-                <li>descrição: {{ register.description }}</li>
-                <li>Situação: {{ getSituationName(register.situation) }}</li>
-                <li>Data: {{ formatData(register.created_at) }}</li>
+    <v-card class="d-flex justify-center p-5">
+        <v-container class="d-flex flex-col p-5" >
+            <v-card-title class="text-center mt-4">
+                Registro de acompanhamento
+            </v-card-title>
+            <ul class="mx-3 my-4 register-list">
+                <li v-for="register in attendance" :key="register.id" class="register-item">
+                    <div>Descrição: {{ register.description }}</div>
+                    <div>Situação: {{ getSituationName(register.situation) }}</div>
+                    <div>Data: {{ formatData(register.created_at) }}</div>
+                </li>
             </ul>
-
         </v-container>
         <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn variant="text" @click="$emit('closeRegister')">Voltar</v-btn>
-            </v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn variant="text" @click="$emit('closeRegister')">Voltar</v-btn>
+        </v-card-actions>
     </v-card>
 </template>
 
@@ -26,17 +27,16 @@ const props = defineProps({
     attendance: Array
 });
 
-
 const getSituationName = (situation) => {
     switch (situation) {
         case 'A':
             return 'Aberto';
         case 'E':
-            return 'Em atendimento'; 
+            return 'Em atendimento';
         case 'S':
-            return 'Solucionado'; 
+            return 'Solucionado';
         default:
-            return ''; 
+            return '';
     }
 }
 
@@ -50,3 +50,14 @@ const formatData = (created_at) => {
 }
 
 </script>
+
+<style scoped>
+.register-list {
+    max-height: 300px; 
+    overflow-y: auto;
+}
+
+.register-item {
+    margin-bottom: 10px; 
+}
+</style>
