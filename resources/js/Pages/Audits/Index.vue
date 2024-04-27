@@ -49,15 +49,19 @@
                                     <td>{{ audit.auditable_id }}</td>
                                     <td>
                                         <div>
-                                            <v-btn color="white">
+                                            <v-btn @click="showingAudit(audit)" color="white">
                                                 <v-icon class="mdi mdi-eye" color="indigo"></v-icon>
                                             </v-btn>
                                         </div>
+                                        <v-dialog v-model="isDialogOpen" @update:modelValue="updateDialogStatus">
+                                            <ShowAudit :isDialogOpen="isDialogOpen"
+                                                @closeDialog="closeDialog" :audits="selectedAudit" />
+                                        </v-dialog>
                                     </td>
                                 </tr>
                             </tbody>
                         </v-table>
-                        <v-pagination v-model="page" :length="pageCount"></v-pagination> 
+                        <v-pagination v-model="page" :length="pageCount"></v-pagination>
                     </v-card>
                 </v-container>
             </v-main>
@@ -72,16 +76,33 @@
 import { Head } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import ShowAudit from '@/Components/ShowAudit.vue';
 import dayjs from 'dayjs';
 
-const selectedPerson = ref(null);
+const selectedAudit = ref(null);
 const page = ref(1);
 const itemPerPage = 10;
 const searchFilter = ref('');
 
+const isDialogOpen = ref(false);
+
 const props = defineProps({
     audits: Array
 });
+
+const updateDialogStatus = (value) => {
+  isDialogOpen.value = value;
+};
+
+const closeDialog = () => {
+  isDialogOpen.value = false;
+};
+
+
+const showingAudit = (audit) => { 
+    selectedAudit.value = audit;
+    isDialogOpen.value = true;
+}
 
 
 const filteredAudit = computed(() => {
@@ -91,7 +112,8 @@ const filteredAudit = computed(() => {
             formatDate(audit.created_at).includes(searchFilter.value) ||
             translateTables(audit.auditable_type).toLowerCase().includes(searchFilter.value.toLowerCase()) ||
             translateEvents(audit.event).toLowerCase().includes(searchFilter.value.toLowerCase()) // corrigido
-    )}
+        )
+    }
     return props.audits;
 });
 
