@@ -119,6 +119,7 @@ const props = defineProps({
     protocols: Object,
     people: Array,
     departament: Array,
+    authUser: Object
 });
 
 
@@ -149,6 +150,8 @@ const updateDeleteStatus = (value) => {
 const searchFilter = ref('');
 const page = ref(1);
 const itemPerPage = 10;
+
+
 
 const filteredProtocol = computed(() => {
     if (searchFilter.value !== '') {
@@ -226,6 +229,7 @@ const getSituationStyle = (situation) => {
             return '';
     }
 };
+
 
 
 </script>

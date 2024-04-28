@@ -24,7 +24,21 @@ class ProtocolsController extends Controller
         $authUser = Auth::user();
         $people = Person::get(['id', 'name']);
         $departament = Departaments::get(['id', 'name']);
-        $protocols = ProtocolsResource::collection(Protocols::with('person', 'departaments', 'attendances')->get());
+
+        if ($authUser->profile === 'A') {
+        
+            $userDepartments = $authUser->grantAccess->map(function ($access) {
+                return $access->departament_id;
+            });
+
+            $protocols = ProtocolsResource::collection(
+                Protocols::whereIn('departament_id', $userDepartments)->with('person', 'departaments', 'attendances')->get()
+            );
+        } else {
+            $protocols = ProtocolsResource::collection(
+                Protocols::with('person', 'departaments', 'attendances')->get()
+            );
+        }
         return Inertia::render('Protocols/Index', compact('protocols', 'people', 'departament', 'authUser'));
     }
 
@@ -42,7 +56,7 @@ class ProtocolsController extends Controller
     public function store(ProtocolsRequest $request)
     {
         $validatedData = $request->validated();
-    
+
         $protocol = Protocols::create([
             'description' => $validatedData['description'],
             'created_data' => $validatedData['created_data'],
@@ -57,8 +71,8 @@ class ProtocolsController extends Controller
             'protocol_id' => $protocol->id,
             'situation' => 'A'
         ]);
-    
-        if($protocol) {
+
+        if ($protocol) {
             if ($request->hasFile('files')) {
                 $fileNames = [];
                 foreach ($request->file('files') as $file) {
@@ -77,7 +91,6 @@ class ProtocolsController extends Controller
      */
     public function show()
     {
-
     }
 
     /**
@@ -105,7 +118,7 @@ class ProtocolsController extends Controller
             'person_id' => $validatedData['person_id'],
             'departament_id' => $validatedData['departament_id']
         ]);
-    
+
         if ($request->hasFile('files')) {
             $fileNames = [];
             foreach ($request->file('files') as $file) {
@@ -115,8 +128,8 @@ class ProtocolsController extends Controller
             }
             $protocol->update(['files' => implode(',', $fileNames)]);
         }
-    
-        return Redirect::route('protocols.index'); 
+
+        return Redirect::route('protocols.index');
     }
 
     /**
@@ -129,7 +142,7 @@ class ProtocolsController extends Controller
             $files = explode(',', $protocol->files);
             foreach ($files as $file) {
                 $filePath = 'protocols/' . trim($file);
-                
+
                 if (Storage::exists($filePath)) {
                     Storage::delete($filePath);
                 }

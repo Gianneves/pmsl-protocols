@@ -30,7 +30,8 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(GrantAccess::class);
     }
 
-    
+   
+
     /**
      * The attributes that should be hidden for serialization.
      *
