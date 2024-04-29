@@ -18,7 +18,7 @@ class PersonResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'birthdate' => Carbon::parse($this->birthdate)->format('d/m/Y'),
+            'birthdate' => $this->birthdate,
             'cpf' => $this->cpf,
             'gender' => $this->gender,
             'city' => $this->city,

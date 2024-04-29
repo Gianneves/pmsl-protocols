@@ -101,7 +101,13 @@ class ProtocolsController extends Controller
         $attendance = Attendance::all();
         $people = Person::all();
         $departament = Departaments::all();
-        return Inertia::render('Protocols/Edit', compact('protocol', 'people', 'departament', 'attendance'));
+
+        $files = [];
+        if (!empty($protocol->files)) {
+            $files = explode(',', $protocol->files);
+        }
+
+        return Inertia::render('Protocols/Edit', compact('protocol', 'people', 'departament', 'attendance', 'files'));
     }
 
     /**

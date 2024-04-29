@@ -1,12 +1,15 @@
 <template>
     <v-card class="d-flex justify-center p-5">
-        <v-container class="d-flex flex-col p-5" >
+        <v-container class="d-flex flex-col p-5">
             <v-card-title class="text-center mt-4">
                 Registro de acompanhamento
             </v-card-title>
             <ul class="mx-3 my-4 register-list">
-                <li v-for="register in attendance" :key="register.id" class="register-item">
-                    <div>Descrição: {{ register.description }}</div>
+                <li v-for="register in filteredAttendance" :key="register.id" class="register-item p-2">
+                    <template v-if="register.description !== '' && register.description !== null">
+                        <div>Descrição: {{ register.description }}</div>
+                    </template>
+
                     <div>Situação: {{ getSituationName(register.situation) }}</div>
                     <div>Data: {{ formatData(register.created_at) }}</div>
                 </li>
@@ -20,12 +23,20 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import { defineProps } from 'vue';
 const emit = defineEmits(['closeRegister']);
 
 const props = defineProps({
-    attendance: Array
+    attendance: Array,
+    protocolId: Number
 });
+
+const filteredAttendance = computed(() => {
+    return props.attendance.filter(register => register.protocol_id === props.protocolId);
+});
+
+
 
 const getSituationName = (situation) => {
     switch (situation) {
@@ -53,11 +64,13 @@ const formatData = (created_at) => {
 
 <style scoped>
 .register-list {
-    max-height: 300px; 
+    max-height: 300px;
     overflow-y: auto;
+    
 }
 
 .register-item {
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
+    background-color: #FFCDD2;
 }
 </style>

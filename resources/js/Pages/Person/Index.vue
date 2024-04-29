@@ -48,7 +48,7 @@
                                 <td>{{ person.id }}</td>
                                 <td>{{ person.name }}</td>
                                 <td>{{ person.cpf }}</td>
-                                <td>{{ person.birthdate }}</td>
+                                <td>{{ formatDate(person.birthdate) }}</td>
                                 <td>{{ person.gender }}</td>
                                 <td>
                                     <div>
@@ -88,6 +88,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PersonForm from '@/Components/PersonForm.vue';
 import EditPerson from '@/Components/EditPerson.vue';
 import DeletePerson from '@/Components/DeletePerson.vue';
+import dayjs from 'dayjs';
 
 const selectedPerson = ref(null);
 const page = ref(1);
@@ -164,6 +165,11 @@ const pageCount = computed(() => {
 
 const updatePage = (newPage) => {
     page.value = newPage;
+}
+
+const formatDate = (value) => {
+    const formattedDate = dayjs(value).format('DD/MM/YYYY');
+    return formattedDate;
 }
 
 </script>

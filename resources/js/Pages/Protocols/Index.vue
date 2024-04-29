@@ -20,6 +20,7 @@
                                 </v-dialog>
                             </div>
                         </div>
+                      
                         <v-card-title>Protocolos</v-card-title>
                         <div class="input-search">
                             <v-text-field label="Buscar" dense v-model="searchFilter" variant="outlined"></v-text-field>
@@ -156,13 +157,12 @@ const itemPerPage = 10;
 const filteredProtocol = computed(() => {
     if (searchFilter.value !== '') {
         return props.protocols.data.filter(protocol =>
-            /*       protocol.id.includes(searchFilter.value) || */
             protocol.created_data.includes(searchFilter.value) ||
-            protocol.deadline.includes(searchFilter.value) ||
             protocol.person.name.toLowerCase().includes(searchFilter.value.toLowerCase()));
     }
     return props.protocols.data;
 });
+
 
 const displayedProtocol = computed(() => {
     const start = (page.value - 1) * itemPerPage;
@@ -174,14 +174,8 @@ const pageCount = computed(() => {
     return Math.ceil(filteredProtocol.value.length / itemPerPage);
 });
 
-const updatePage = (newPage) => {
-    page.value = newPage;
-}
-
-
 
 const formatDeadline = (created_data, deadline) => {
-
     const created_date_parts = created_data.split("/");
     const startDate = new Date(
         created_date_parts[2],
@@ -202,6 +196,7 @@ const formatDeadline = (created_data, deadline) => {
     const formattedEndDate = `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getFullYear()}`;
     return formattedEndDate;
 }
+
 
 
 const getSituationName = (situation) => {

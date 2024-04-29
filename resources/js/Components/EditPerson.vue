@@ -16,7 +16,7 @@
 
                       <v-col cols="12" md="4">
                           <v-text-field label="Data de nascimento" type="date" id="birthdate"
-                              v-model="form.birthdate" required variant="outlined">
+                              v-model="form.birthdate" required variant="outlined"  @change="form.validate('birthdate')">
                           </v-text-field>
                           <span v-if="form.invalid('birthdate')" class="text-base text-red-500">
                                 {{ form.errors.birthdate }}
@@ -90,10 +90,9 @@ const props = defineProps({
   person: Object
 });
 
-
 const form = useForm('put', route('person.update', { id: props.person.id }), {
   name: props.person.name,
-  birthdate: props.person?.birthdate,
+  birthdate: props.person.birthdate,
   cpf: props.person.cpf,
   gender: props.person.gender,
   city: props.person.city,
@@ -116,6 +115,8 @@ const submit = () => form.submit({
     toast.error("Erro ao atualizar Pessoa!", { position: 'top-right' });
   }
 });
+
+
 
 </script>
 

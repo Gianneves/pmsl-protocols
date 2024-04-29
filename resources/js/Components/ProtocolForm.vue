@@ -33,8 +33,9 @@
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-select label="Departamento" v-model="form.departament_id" @change="form.validate('departament_id')"
-                                :items="departament" item-title="name" item-value="id" required>
+                            <v-select label="Departamento" v-model="form.departament_id"
+                                @change="form.validate('departament_id')" :items="departament" item-title="name"
+                                item-value="id" required>
                             </v-select>
                             <span v-if="form.invalid('departament_id')" class="text-base text-red-500">
                                 {{ form.errors.departament_id }}
@@ -52,12 +53,23 @@
                                 </span>
                             </v-col>
                             <v-col>
-                                <v-file-input label="Anexar arquivos" id="files" v-model="form.files" variant="outlined"  multiple
-                                    maxlength="2000" style="width: 300px;" @change="form.validate('files')">
+                                <v-file-input label="Anexar arquivos" id="files" v-model="form.files" variant="outlined"
+                                    multiple maxlength="2000" style="width: 300px;" @change="form.validate('files')">
                                 </v-file-input>
                                 <span v-if="form.invalid('files')" class="text-base text-red-500">
                                     {{ form.errors.files }}
                                 </span>
+                                <div v-if="form.files.length > 0">
+                                    <h3 class="font-bold">Arquivos Selecionados:</h3>
+                                    <ul>
+                                        <li v-for="(file, index) in form.files" :key="index" class="mt-2">
+                                            {{ file.name }} 
+                                            <v-btn @click="removeFile(index)" rounded="xl"  color="red" size="x-small" >
+                                                X
+                                            </v-btn>
+                                        </li>
+                                    </ul>
+                                </div>
                             </v-col>
                         </v-row>
 
@@ -87,7 +99,7 @@ const form = useForm('post', route('protocols.store'), {
     created_data: '',
     deadline: '',
     person_id: '',
-    departament_id: '', 
+    departament_id: '',
     files: []
 });
 
@@ -107,7 +119,9 @@ const submit = () => form.submit({
     }
 });
 
-
+const removeFile = (index) => {
+    form.files.splice(index, 1); // Remove o arquivo da lista de arquivos selecionados
+}
 
 const props = defineProps({
     isDialogOpen: Boolean,

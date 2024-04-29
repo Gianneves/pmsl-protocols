@@ -18,10 +18,10 @@
                         </v-btn>
                     </div>
                 </div>
-                <v-card class="card-container" width="900px">
+                <v-card class="card-container md:w-3/4 lg:w-1/2 mx-auto" width="900px">
                     <v-card-title class="text-center">Editar Protocolo</v-card-title>
-                    <v-container class="d-flex justify-between m-3">
-                        <div>
+                    <v-container class="flex flex-col md:flex-row justify-between">
+                        <div class="mb-4 md:mb-0 md:w-1/2">
                             <v-btn @click="isDialogOpen = true">Acompanhamento</v-btn>
                             <v-dialog v-model="isDialogOpen" @update:modelValue="updateDialogStatus">
                                 <AttendanceModal :isDialogOpen="isDialogOpen" @closeDialog="closeDialog"
@@ -31,10 +31,11 @@
                         <div v-if="attendance.length > 0">
                             <v-btn @click="isRegisterOpen = true">
                                 <v-icon dark class="mdi mdi-file-document-multiple"></v-icon>
+                                 <span class="ml-2">Registros</span>
                             </v-btn>
                             <v-dialog v-model="isRegisterOpen" @update:modelValue="updateRegisterStatus">
                                 <RegisterModal :isRegisterOpen="isRegisterOpen" @closeRegister="closeRegister"
-                                    :attendance="attendance" />
+                                    :attendance="attendance" :protocolId="protocol.id" />
                             </v-dialog>
                         </div>
                     </v-container>
@@ -88,10 +89,14 @@
                                 <v-col cols="12" class="input-col">
                                     <v-card-title v-if="props.protocol.files">
                                         Arquivos:
-
+                                        <ul>
+                                            <li v-for="(file, index) in files" :key="index" class="mt-1">
+                                                <a :href="`/storage/protocols/${file}`" target="_blank">{{ file }}</a>
+                                            </li>
+                                        </ul>
 
                                     </v-card-title>
-                                    <!--          <div v-else>
+                                    <div v-else>
                                     <v-file-input label="Anexar arquivos" id="files" v-model="form.files"
                                         variant="outlined" multiple maxlength="2000" style="width: 300px;"
                                         @change="form.validate('files')">
@@ -99,7 +104,7 @@
                                     <span v-if="form.invalid('files')" class="text-base text-red-500">
                                         {{ form.errors.files }}
                                     </span>
-                                </div> -->
+                                </div> 
                                 </v-col>
                             </v-row>
                         </v-container>
@@ -132,10 +137,9 @@ const props = defineProps({
     people: Array,
     protocol: Object,
     departament: Array,
-    attendance: Array
+    attendance: Array,
+    files: Array
 });
-
-console.log(props.protocol.id)
 
 const updateDialogStatus = (value) => {
     isDialogOpen.value = value;
@@ -182,9 +186,7 @@ const submit = () => form.submit({
 
 <style scoped>
 .card-container {
-    margin-top: 50px;
-    margin-left: 70px;
-    padding: 5px;
+ 
     background-color: #FFF;
     box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.5);
 }
