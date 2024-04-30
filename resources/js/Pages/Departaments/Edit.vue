@@ -133,7 +133,7 @@ const submit = () => form.submit({
 const grantPermission = () => accessForm.submit({
     preserveScroll: true,
     onSuccess: () => {
-        form.reset();
+        accessForm.reset();
         toast.success("Acesso criado com sucesso!", {
             position: 'top-right',
         });

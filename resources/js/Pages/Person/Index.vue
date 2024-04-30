@@ -4,23 +4,22 @@
     <v-app>
         <AuthenticatedLayout>
             <v-main class="d-flex">
-            <v-container class="container">
-                <v-card flat class="border mb-4" width="90%">
-                    <div class="d-flex justify-space-between mt-5">
+            <v-container class="container w-full lg:w-4/5 xl:w-3/4">
+                <v-card flat class="border mb-4 w-full overflow-x-auto">
+                    <div class="sm:flex justify-between items-center my-5 mx-5">
                         <v-card-title>Pessoas</v-card-title>
                         <v-card-title>
                             <v-btn @click="isDialogOpen = true">Cadastrar</v-btn>
                             <v-dialog v-model="isDialogOpen" @update:modelValue="updateDialogStatus" >
                               <PersonForm :isDialogOpen="isDialogOpen" @closeDialog="closeDialog" />
                             </v-dialog>
-                            
                         </v-card-title>
                     </div>
                     <div class="input-search">
                         <v-text-field label="Buscar" dense v-model="searchFilter" variant="outlined"></v-text-field>
                     </div>
                     <hr>
-                    <v-table>
+                    <v-table class="w-full" v-if="people.data.length > 0">
                         <thead>
                             <tr>
                                 <th class="text-left">
@@ -51,12 +50,12 @@
                                 <td>{{ formatDate(person.birthdate) }}</td>
                                 <td>{{ person.gender }}</td>
                                 <td>
-                                    <div>
-                                        <v-btn @click="editSelectedPerson(person)" color="white">
+                                    <div class="flex items-center">
+                                        <v-btn @click="editSelectedPerson(person)" color="white"  class="py-2 px-4" >
                                             <v-icon class="mdi mdi-eye" color="indigo"></v-icon>
                                         </v-btn>
 
-                                        <v-btn @click="deleteSelectPerson(person)" color="red" dark class="ml-3">
+                                        <v-btn @click="deleteSelectPerson(person)" color="red" dark  class="py-2 px-4 ml-3">
                                             <v-icon dark class="mdi mdi-delete-forever md-4"></v-icon>
                                         </v-btn>
                                     </div>
@@ -70,10 +69,15 @@
                             </tr>
                         </tbody>
                     </v-table>
+                    <v-card v-else>
+                            <v-card-text class="flex justify-center items-center h-full">
+                                Nenhuma pessoa encontrada!
+                            </v-card-text>
+                        </v-card>
                     <v-pagination v-model="page" :length="pageCount"></v-pagination>
                 </v-card>
             </v-container>
-        </v-main>F
+        </v-main>
         </AuthenticatedLayout>
        
     </v-app>

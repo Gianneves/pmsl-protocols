@@ -7,6 +7,8 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -32,6 +34,14 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+
+        $authUser = Auth::user()->active;
+
+        if($authUser === 'N') {
+            Auth::logout();
+            return redirect()->route('login')->with('status', 'Conta desativada. Entre em contato com o suporte.');
+        }
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

@@ -2,11 +2,13 @@
 import Checkbox from '@/Components/Checkbox.vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+const toast = useToast();
 
 defineProps({
     canResetPassword: {
@@ -32,24 +34,26 @@ const submit = () => {
 
 <template>
     <GuestLayout>
+
         <Head title="Login" />
         <v-main class="d-flex  custom-background">
-            <v-container class="d-flex align-center justify-center" style="height: 100vh;" >
-                <v-card  class="border d-flex flex-col text-center custom-card" width="35%">
+            <v-container class="d-flex align-center justify-center" style="height: 100vh;">
+                <v-card class="border d-flex flex-col text-center custom-card" width="35%">
                     <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
                         {{ status }}
                     </div>
-                    <v-card-title> <v-avatar image="/img/9774779.jpg" size="80" ></v-avatar> </v-card-title>
+                    <v-card-title> <v-avatar image="/img/9774779.jpg" size="80"></v-avatar> </v-card-title>
                     <v-card-title> Atende Cidadão - PMSL </v-card-title>
                     <v-form @submit.prevent="submit">
-                        <div class="mt-4" >
-                            <v-text-field id="email" type="email" class="mt-1" label="Email" v-model="form.email" required autofocus
-                                autocomplete="username"  variant="outlined"></v-text-field>
+                        <div class="mt-4">
+                            <v-text-field id="email" type="email" class="mt-1" label="Email" v-model="form.email"
+                                required autofocus autocomplete="username" variant="outlined"></v-text-field>
                             <InputError class="mt-2" :message="form.errors.email" />
                         </div>
                         <div class="mt-4">
-                            <v-text-field id="password" type="password" label="Senha" class="mt-1" v-model="form.password" required
-                                autocomplete="current-password"  variant="outlined"></v-text-field>
+                            <v-text-field id="password" type="password" label="Senha" class="mt-1"
+                                v-model="form.password" required autocomplete="current-password"
+                                variant="outlined"></v-text-field>
                             <InputError class="mt-2" :message="form.errors.password" />
                         </div>
 
@@ -83,11 +87,8 @@ const submit = () => {
 }
 
 .custom-background {
-    background-image: url('/public/img/bg-login.jpg'); 
+    background-image: url('/public/img/bg-login.jpg');
     background-size: cover;
-    background-position: center; 
+    background-position: center;
 }
-
-
-
 </style>

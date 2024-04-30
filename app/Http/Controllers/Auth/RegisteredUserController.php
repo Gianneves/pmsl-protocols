@@ -62,7 +62,7 @@ class RegisteredUserController extends Controller
                 'password' => Hash::make($validatedData['password']),
                 'profile' => $validatedData['profile'],
                 'cpf' => $validatedData['cpf'],
-                'active' => 'S'
+                'active' => $request['active']
             ]);
 
             event(new Registered($user));
@@ -79,7 +79,7 @@ class RegisteredUserController extends Controller
                     'password' => Hash::make($validatedData['password']),
                     'profile' => $validatedData['profile'],
                     'cpf' => $validatedData['cpf'],
-                    'active' => 'S'
+                    'active' => $request['active']
                 ]);
 
                 event(new Registered($user));
@@ -117,7 +117,7 @@ class RegisteredUserController extends Controller
         $user->update([
             'name' => $validatedData['name'],
             'profile' => $validatedData['profile'],
-            'active' => 'S'
+            'active' => $request['active']
         ]);
 
        

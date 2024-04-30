@@ -1,13 +1,3 @@
-<script setup>
-import { ref } from 'vue';
-import { Link } from '@inertiajs/vue3';
-
-
-const showingNavigationDropdown = ref(false);
-const isDrawerOpen = ref(false);
-
-</script>
-
 <template>
 
     <v-app>
@@ -64,3 +54,23 @@ const isDrawerOpen = ref(false);
         </main>
     </v-app>
 </template>
+
+<script setup>
+import {  ref } from 'vue';
+import { Link } from '@inertiajs/vue3';
+import { useToast } from 'vue-toast-notification';
+
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+const props = defineProps({
+    authUser: Array
+});
+
+console.log(props.authUser)
+const toast = useToast();
+
+const isDrawerOpen = ref(false);
+
+
+
+</script>

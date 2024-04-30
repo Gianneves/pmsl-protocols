@@ -1,5 +1,5 @@
 <template>
-    <v-card-text class="custom-card">
+    <v-card-text :class="[ 'custom-card', { 'overflow-auto': form.files.length > 2 } ]">
         <v-card-text>
             <v-card-title>Criar Protocolo</v-card-title>
             <v-form @submit.prevent="submit">
@@ -120,7 +120,7 @@ const submit = () => form.submit({
 });
 
 const removeFile = (index) => {
-    form.files.splice(index, 1); // Remove o arquivo da lista de arquivos selecionados
+    form.files.splice(index, 1); 
 }
 
 const props = defineProps({
@@ -136,5 +136,10 @@ const props = defineProps({
 .custom-card {
     background-color: #FFF;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+    max-height: 500px;
+}
+
+.overflow-auto {
+    overflow-y: auto; 
 }
 </style>

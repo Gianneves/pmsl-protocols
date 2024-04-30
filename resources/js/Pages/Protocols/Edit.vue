@@ -31,7 +31,7 @@
                         <div v-if="attendance.length > 0">
                             <v-btn @click="isRegisterOpen = true">
                                 <v-icon dark class="mdi mdi-file-document-multiple"></v-icon>
-                                 <span class="ml-2">Registros</span>
+                                <span class="ml-2">Registros</span>
                             </v-btn>
                             <v-dialog v-model="isRegisterOpen" @update:modelValue="updateRegisterStatus">
                                 <RegisterModal :isRegisterOpen="isRegisterOpen" @closeRegister="closeRegister"
@@ -96,15 +96,6 @@
                                         </ul>
 
                                     </v-card-title>
-                                    <div v-else>
-                                    <v-file-input label="Anexar arquivos" id="files" v-model="form.files"
-                                        variant="outlined" multiple maxlength="2000" style="width: 300px;"
-                                        @change="form.validate('files')">
-                                    </v-file-input>
-                                    <span v-if="form.invalid('files')" class="text-base text-red-500">
-                                        {{ form.errors.files }}
-                                    </span>
-                                </div> 
                                 </v-col>
                             </v-row>
                         </v-container>
@@ -186,7 +177,7 @@ const submit = () => form.submit({
 
 <style scoped>
 .card-container {
- 
+
     background-color: #FFF;
     box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.5);
 }

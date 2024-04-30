@@ -2,10 +2,10 @@
     <v-app>
         <AuthenticatedLayout>
             <v-main>
-                <v-container class="container">
-                    <v-card flat class="border" width="90%">
-                        <div class="d-flex justify-space-between my-5 mx-5">
-                            <div>
+                <v-container class="container max-w-7xl mx-auto px-4">
+                    <v-card flat class="border w-full overflow-x-auto" >
+                        <div class="sm:flex justify-between items-center my-5 mx-5">
+                            <div class="mb-4 sm:mb-0">
                                 <v-btn color="indigo">
                                     <a href="pdf/protocolPdf">
                                         <v-icon icon="mdi-download-outline" class="mr-3"></v-icon> Gerar PDF
@@ -26,7 +26,7 @@
                             <v-text-field label="Buscar" dense v-model="searchFilter" variant="outlined"></v-text-field>
                         </div>
                         <hr>
-                        <v-table v-if="protocols.data.length > 0">
+                        <v-table class="w-full" v-if="protocols.data.length > 0">
                             <thead>
                                 <tr>
                                     <th class="text-left">
@@ -64,14 +64,14 @@
                                         {{ getSituationName(protocol.latest_attendance_situation) }}
                                     </td>
                                     <td>
-                                        <div>
+                                        <div class="flex items-center">
                                             <Link :href="route('protocols.edit', protocol.id)">
-                                            <v-btn color="white">
+                                            <v-btn color="white" class="py-2 px-4">
                                                 <v-icon class="mdi mdi-eye" color="indigo"></v-icon>
                                             </v-btn>
                                             </Link>
                                             <v-btn @click="deleteSelectProtocol(protocol.id)" color="red" dark
-                                                class="ml-3">
+                                                class="py-2 px-4 ml-3">
                                                 <v-icon dark class="mdi mdi-delete-forever md-4"></v-icon>
                                             </v-btn>
                                         </div>
@@ -94,7 +94,6 @@
                     </v-card>
                 </v-container>
             </v-main>
-
         </AuthenticatedLayout>
     </v-app>
 
@@ -157,6 +156,7 @@ const itemPerPage = 10;
 const filteredProtocol = computed(() => {
     if (searchFilter.value !== '') {
         return props.protocols.data.filter(protocol =>
+            protocol.id.toString().includes(searchFilter.value.toLowerCase()) ||
             protocol.created_data.includes(searchFilter.value) ||
             protocol.person.name.toLowerCase().includes(searchFilter.value.toLowerCase()));
     }
