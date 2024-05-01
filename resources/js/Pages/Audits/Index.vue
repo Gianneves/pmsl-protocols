@@ -111,9 +111,10 @@ const filteredAudit = computed(() => {
             audit.user.name.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
             formatDate(audit.created_at).includes(searchFilter.value) ||
             translateTables(audit.auditable_type).toLowerCase().includes(searchFilter.value.toLowerCase()) ||
-            translateEvents(audit.event).toLowerCase().includes(searchFilter.value.toLowerCase()) // corrigido
-        )
+            translateEvents(audit.event).toLowerCase().includes(searchFilter.value.toLowerCase())
+        );
     }
+ 
     return props.audits;
 });
 
@@ -126,11 +127,6 @@ const displayedAudits = computed(() => {
 const pageCount = computed(() => {
     return Math.ceil(filteredAudit.value.length / itemPerPage);
 });
-
-const updatePage = (newPage) => {
-    page.value = newPage;
-}
-
 
 
 const translateEvents = (value) => {

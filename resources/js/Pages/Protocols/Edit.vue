@@ -86,16 +86,33 @@
                                         {{ form.errors.description }}
                                     </span>
                                 </v-col>
-                                <v-col cols="12" class="input-col">
-                                    <v-card-title v-if="props.protocol.files">
-                                        Arquivos:
-                                        <ul>
-                                            <li v-for="(file, index) in files" :key="index" class="mt-1">
-                                                <a :href="`/storage/protocols/${file}`" target="_blank">{{ file }}</a>
-                                            </li>
-                                        </ul>
+                                <v-col cols="12" md="6" class="input-col">
+                                    <v-card v-if="props.protocol.files" class="card-container" width="350px">
+                                        <v-card-title>Arquivos:</v-card-title>
+                                        <v-table class="px-2">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-left">
+                                                        Nome:
+                                                    </th>
+                                                    <th class="text-left">
+                                                        Ver arquivo:
+                                                    </th>
 
-                                    </v-card-title>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(file, index) in files" :key="index">
+                                                    <td>{{ file }}</td>
+                                                    <td>
+                                                        <a :href="`/storage/protocols/${file}`" target="_blank"><v-icon
+                                                                class="mdi mdi-eye"></v-icon></a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </v-table>
+                                    </v-card>
+
                                 </v-col>
                             </v-row>
                         </v-container>
@@ -177,7 +194,6 @@ const submit = () => form.submit({
 
 <style scoped>
 .card-container {
-
     background-color: #FFF;
     box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.5);
 }

@@ -1,14 +1,16 @@
 <template>
+
     <Head title="Atendimento Cidadão" />
     <v-app>
-        <AuthenticatedLayout>
-            <v-main class="main-content">
-                <v-card-text class="mt-3 ml-5 font-weight-bold" >Atende Cidadão > Home</v-card-text>
-                <v-container class="container d-flex justify-center align-center ">
-                        <v-img class="img-content" style="max-width: 45%; max-height: 80%;" src="/img/5173528.jpg"></v-img>
-                </v-container>
-
+        <AuthenticatedLayout class="custom-background">
+            <v-main>
+                <div class="my-5 mx-5">
+                    <v-card-title class="title ">
+                        Atendimento ao Cidadão - PMSL
+                    </v-card-title>
+                </div>
             </v-main>
+
         </AuthenticatedLayout>
     </v-app>
 </template>
@@ -21,5 +23,16 @@ import { Head } from '@inertiajs/vue3';
 </script>
 
 <style scoped>
+.custom-background {
+    background-image: url('/public/img/2228834.jpg');
+    background-size: cover;
+    background-position-x: right;
+}
 
+.title {
+    font-family: "Barlow", sans-serif;
+    font-weight: 800;
+    color: #536DFE;
+    font-size: 30px;
+}
 </style>

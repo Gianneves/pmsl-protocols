@@ -18,10 +18,10 @@
                 <v-list-item prepend-icon="mdi mdi-bank-circle">
                     <Link :href="route('departaments.index')">Departamentos</Link>
                 </v-list-item>
-                <v-list-item prepend-icon="mdi-account-group">
+                <v-list-item prepend-icon="mdi-account-group" v-if="$page.props.auth.user.profile === 'S' || $page.props.auth.user.profile === 'T'">
                     <Link :href="route('user.index')">Usuários</Link>
                 </v-list-item>
-                <v-list-item prepend-icon="mdi mdi-target-account">
+                <v-list-item prepend-icon="mdi mdi-target-account" v-if="$page.props.auth.user.profile === 'S' || $page.props.auth.user.profile === 'T'" >
                     <Link :href="route('audit.index')">Auditoria</Link>
                 </v-list-item>
             </v-list>
@@ -58,16 +58,6 @@
 <script setup>
 import {  ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
-import { useToast } from 'vue-toast-notification';
-
-import 'vue-toast-notification/dist/theme-sugar.css';
-
-const props = defineProps({
-    authUser: Array
-});
-
-console.log(props.authUser)
-const toast = useToast();
 
 const isDrawerOpen = ref(false);
 

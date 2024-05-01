@@ -16,7 +16,7 @@ class AuditController extends Controller
         $user = User::all();
 
         if($authUser->profile === 'A') {
-            return Inertia::render('dashboard')->with('Você não tem permissão para acesso!');
+            return Inertia::render('dashboard')->with('errorMessage','Você não tem permissão para acesso!');
         }
 
         $audits = Audit::with('user')->get();
