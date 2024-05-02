@@ -13,7 +13,7 @@
                             <v-text-field label="Buscar" dense v-model="searchFilter" variant="outlined"></v-text-field>
                         </div>
                         <hr>
-                        <v-table>
+                        <v-table >
                             <thead>
                                 <tr>
                                     <th class="text-left">
@@ -118,10 +118,16 @@ const filteredAudit = computed(() => {
     return props.audits;
 });
 
+const sortedAudits = computed(() => {
+        return filteredAudit.value.slice().sort((a, b) => {
+            return new Date(b.created_at) - new Date(a.created_at);
+        });
+    });
+
 const displayedAudits = computed(() => {
     const start = (page.value - 1) * itemPerPage;
     const end = start + itemPerPage;
-    return filteredAudit.value.slice(start, end);
+    return sortedAudits.value.slice(start, end);
 });
 
 const pageCount = computed(() => {
