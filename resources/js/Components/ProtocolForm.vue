@@ -54,7 +54,7 @@
                             </v-col>
                             <v-col>
                                 <v-file-input label="Anexar arquivos" id="files" v-model="form.files" variant="outlined"
-                                    multiple maxlength="2000" style="width: 300px;" @change="form.validate('files')">
+                                    multiple maxlength="2000" style="width: 300px; overflow-x: auto;" @change="form.validate('files')">
                                 </v-file-input>
                                 <span v-if="form.invalid('files')" class="text-base text-red-500">
                                     {{ form.errors.files }}
@@ -136,10 +136,11 @@ const props = defineProps({
 .custom-card {
     background-color: #FFF;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
-    max-height: 500px;
+   
 }
 
 .overflow-auto {
     overflow-y: auto; 
 }
+
 </style>
