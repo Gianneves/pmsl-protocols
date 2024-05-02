@@ -7,10 +7,8 @@ use App\Http\Requests\UserCreateRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -26,6 +24,11 @@ class RegisteredUserController extends Controller
 
         if($authUser->profile === 'A') {
             return Inertia::render('dashboard');
+        }
+
+        
+        if($authUser->profile === 'S') {
+            $user = User::where('profile', 'A')->get();
         }
 
         return Inertia::render('User/Index', compact('user', 'authUser'));
@@ -100,18 +103,17 @@ class RegisteredUserController extends Controller
         if($authProfile === 'A') {
             return Inertia::render('dashboard');
         }
-        return Inertia::render('User/Edit', compact('user'));
+        return Inertia::render('User/Edit', compact('user', 'authProfile'));
     }
 
 
     public function update(UserCreateRequest $request, User $user)
     {
-
         $authProfile = Auth::user()->profile;
 
         if($authProfile === 'A') {
             return Inertia::render('dashboard');
-        }
+        } 
 
         $validatedData = $request->validated();
         $user->update([
@@ -120,7 +122,6 @@ class RegisteredUserController extends Controller
             'active' => $request['active']
         ]);
 
-       
         return redirect()->route('user.index');
     }
 

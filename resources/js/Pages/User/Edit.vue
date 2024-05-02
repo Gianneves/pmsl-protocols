@@ -26,9 +26,17 @@
                                 {{ form.errors.email }}
                             </span>
                         </div>
-                        <div class="mt-4">
+                        <div class="mt-4" v-if="authProfile === 'T'">
                             <v-select id="profile" label="Perfil" :items="['T', 'S', 'A']" v-model="form.profile"
                                 required autofocus autocomplete="profile" @change="form.validate('profile')"
+                                variant="outlined"></v-select>
+                            <span v-if="form.invalid('profile')" class="text-base text-red-500">
+                                {{ form.errors.profile }}
+                            </span>
+                        </div>
+                        <div class="mt-4" v-else>
+                            <v-select id="profile" label="Perfil" :items="['A']" v-model="form.profile" required
+                                autofocus autocomplete="profile" @change="form.validate('profile')"
                                 variant="outlined"></v-select>
                             <span v-if="form.invalid('profile')" class="text-base text-red-500">
                                 {{ form.errors.profile }}
@@ -77,10 +85,9 @@ import 'vue-toast-notification/dist/theme-sugar.css';
 const toast = useToast();
 
 const props = defineProps({
-    user: Array
+    user: Array,
+    authProfile: Object
 });
-
-console.log(props.user)
 
 const form = useForm('put', route('user.update', { id: props.user.id }), {
     name: props.user?.name,
@@ -89,7 +96,6 @@ const form = useForm('put', route('user.update', { id: props.user.id }), {
     cpf: props.user?.cpf,
     active: props.user?.active
 });
-
 
 const submit = () => form.submit({
     preserveScroll: true,
