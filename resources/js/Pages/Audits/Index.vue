@@ -13,7 +13,7 @@
                             <v-text-field label="Buscar" dense v-model="searchFilter" variant="outlined"></v-text-field>
                         </div>
                         <hr>
-                        <v-table >
+                        <v-table class="p-4">
                             <thead>
                                 <tr>
                                     <th class="text-left">
@@ -39,7 +39,7 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="p-2">
                                 <tr v-for="audit in displayedAudits" :key="audit.id">
                                     <td>{{ audit.id }}</td>
                                     <td>{{ audit.user.name }}</td>
@@ -54,8 +54,8 @@
                                             </v-btn>
                                         </div>
                                         <v-dialog v-model="isDialogOpen" @update:modelValue="updateDialogStatus">
-                                            <ShowAudit :isDialogOpen="isDialogOpen"
-                                                @closeDialog="closeDialog" :audits="selectedAudit" />
+                                            <ShowAudit :isDialogOpen="isDialogOpen" @closeDialog="closeDialog"
+                                                :audits="selectedAudit" />
                                         </v-dialog>
                                     </td>
                                 </tr>
@@ -90,16 +90,18 @@ const props = defineProps({
     audits: Array
 });
 
+console.log(props.audits)
+
 const updateDialogStatus = (value) => {
-  isDialogOpen.value = value;
+    isDialogOpen.value = value;
 };
 
 const closeDialog = () => {
-  isDialogOpen.value = false;
+    isDialogOpen.value = false;
 };
 
 
-const showingAudit = (audit) => { 
+const showingAudit = (audit) => {
     selectedAudit.value = audit;
     isDialogOpen.value = true;
 }
@@ -114,15 +116,15 @@ const filteredAudit = computed(() => {
             translateEvents(audit.event).toLowerCase().includes(searchFilter.value.toLowerCase())
         );
     }
- 
+
     return props.audits;
 });
 
 const sortedAudits = computed(() => {
-        return filteredAudit.value.slice().sort((a, b) => {
-            return new Date(b.created_at) - new Date(a.created_at);
-        });
+    return filteredAudit.value.slice().sort((a, b) => {
+        return new Date(b.created_at) - new Date(a.created_at);
     });
+});
 
 const displayedAudits = computed(() => {
     const start = (page.value - 1) * itemPerPage;
@@ -162,6 +164,8 @@ const translateTables = (value) => {
             return 'Usuários';
         case 'App\\Models\\Attendance':
             return 'Atendimento';
+        case 'App\\Models\\GrantAccess':
+            return 'Liberar Acesso';
         default:
             return ''
     }

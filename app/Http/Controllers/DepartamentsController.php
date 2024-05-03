@@ -8,7 +8,6 @@ use App\Http\Resources\DepartamentsResource;
 use App\Models\Departaments;
 use App\Models\GrantAccess;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -17,12 +16,24 @@ class DepartamentsController extends Controller
 {
     public function index() {
         $authUser = Auth::user();
+
+        if($authUser->profile === 'A') {
+            return Inertia::render('dashboard')->with('errorMessage','Você não tem permissão para acesso!');
+        }
+
         $departament = DepartamentsResource::collection(Departaments::all());
         return Inertia::render('Departaments/Index', compact('departament', 'authUser'));
     }
 
 
     public function store(DepartamentRequest $request, Departaments $departament) {
+        $authUser = Auth::user();
+
+        if($authUser->profile === 'A') {
+            return Inertia::render('dashboard')->with('errorMessage','Você não tem permissão para acesso!');
+        }
+
+
         $validatedData = $request->validated();
 
         $departament->create([
@@ -34,7 +45,13 @@ class DepartamentsController extends Controller
 
     public function edit(Departaments $departament) {
         $authUser = Auth::user();
-        $users = User::all();
+
+        if($authUser->profile === 'A') {
+            return Inertia::render('dashboard')->with('errorMessage','Você não tem permissão para acesso!');
+        }
+
+
+        $users = User::all(); 
         $grantAccess = GrantAccess::with('user')->where('departament_id', $departament->id)->get();
         return Inertia::render('Departaments/Edit', compact('departament','users', 'grantAccess', 'authUser'));
     }
@@ -70,6 +87,11 @@ class DepartamentsController extends Controller
     }
 
     public function update(DepartamentRequest $request, Departaments $departament) {
+        $authUser = Auth::user();
+
+        if($authUser->profile === 'A') {
+            return Inertia::render('dashboard')->with('errorMessage','Você não tem permissão para acesso!');
+        }
         $validatedData = $request->validated();
 
         $departament->update([

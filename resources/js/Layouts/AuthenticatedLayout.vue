@@ -15,7 +15,7 @@
                 <v-list-item prepend-icon="mdi-school">
                     <Link :href="route('protocols.index')">Protocolos</Link>
                 </v-list-item>
-                <v-list-item prepend-icon="mdi mdi-bank-circle">
+                <v-list-item prepend-icon="mdi mdi-bank-circle" v-if="$page.props.auth.user.profile === 'S' || $page.props.auth.user.profile === 'T'">
                     <Link :href="route('departaments.index')">Departamentos</Link>
                 </v-list-item>
                 <v-list-item prepend-icon="mdi-account-group" v-if="$page.props.auth.user.profile === 'S' || $page.props.auth.user.profile === 'T'">

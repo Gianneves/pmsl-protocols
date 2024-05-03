@@ -67,6 +67,8 @@ const translateTables = (value) => {
             return 'Usuários';
         case 'App\\Models\\Attendance':
             return 'Atendimento';
+        case 'App\\Models\\GrantAccess':
+            return 'Liberar Acesso';
         default:
             return ''
     }
