@@ -65,7 +65,7 @@ class RegisteredUserController extends Controller
                 'password' => Hash::make($validatedData['password']),
                 'profile' => $validatedData['profile'],
                 'cpf' => $validatedData['cpf'],
-                'active' => $request['active']
+                'active' => 'S'
             ]);
 
             event(new Registered($user));
