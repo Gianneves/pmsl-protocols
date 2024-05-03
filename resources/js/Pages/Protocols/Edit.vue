@@ -25,7 +25,7 @@
                             <v-btn @click="isDialogOpen = true">Acompanhamento</v-btn>
                             <v-dialog v-model="isDialogOpen" @update:modelValue="updateDialogStatus">
                                 <AttendanceModal :isDialogOpen="isDialogOpen" @closeDialog="closeDialog"
-                                    :protocol="protocol" width="900px" />
+                                    :protocol="protocol" width="700px text-center" />
                             </v-dialog>
                         </div>
                         <div v-if="attendance.length > 0">
