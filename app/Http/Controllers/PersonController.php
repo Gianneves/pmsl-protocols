@@ -75,6 +75,7 @@ class PersonController extends Controller
         
         $validatedData = $request->validated();
 
+     
         $person->update([
             'name' => $validatedData['name'],
             'birthdate' => $validatedData['birthdate'],

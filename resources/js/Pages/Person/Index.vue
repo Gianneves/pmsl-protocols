@@ -46,7 +46,7 @@
                             <tr v-for="person in displayedPerson" :key="person.id">
                                 <td>{{ person.id }}</td>
                                 <td>{{ person.name }}</td>
-                                <td>{{ person.cpf }}</td>
+                                <td>{{ formatCPF(person.cpf) }}</td>
                                 <td>{{ formatDate(person.birthdate) }}</td>
                                 <td>{{ person.gender }}</td>
                                 <td>
@@ -150,7 +150,7 @@ const filteredPerson = computed(() => {
     if (searchFilter.value !== '') {
         return props.people.data.filter(person =>
             person.name.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
-            person.birthdate.includes(searchFilter.value) ||
+            formatDate(person.birthdate).includes(searchFilter.value) ||
             person.cpf.includes(searchFilter.value) ||
             person.gender.toLowerCase().includes(searchFilter.value.toLowerCase()));
     }
@@ -175,6 +175,10 @@ const formatDate = (value) => {
     const formattedDate = dayjs(value).format('DD/MM/YYYY');
     return formattedDate;
 }
+
+const formatCPF = (cpf) => {
+    return cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
+} 
 
 </script>
 

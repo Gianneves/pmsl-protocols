@@ -3,9 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
+use App\Rules\CPFValidation;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use LaravelLegends\PtBrValidator\Rules\FormatoCpf;
+
 
 class UserStoreRequest extends FormRequest
 
@@ -21,12 +22,28 @@ class UserStoreRequest extends FormRequest
     public function rules(): array
 
     {
-        return [
+
+        $userId = $this->route('user');
+
+        $rules = [
             'name' => 'required|min:3|max:255',
             'birthdate' => 'required|date',
-            'cpf' => ['required', new FormatoCpf],
             'gender' => 'required|min:3'
         ];
+    
+
+        if ($this->isMethod('PUT')) {
+            $rules['cpf'] = 'sometimes';
+        } else {
+          
+            $rules['cpf'] = [
+                'required',
+                new CPFValidation,
+                Rule::unique('people', 'cpf')->ignore($userId),
+            ];
+        }
+    
+        return $rules;
 
     }
 
@@ -35,7 +52,8 @@ class UserStoreRequest extends FormRequest
     {
         return [
             'required' => 'Este campo é obrigatório!',
-            'cpf' => 'CPF inválido!'
+            'cpf' => 'CPF inválido!',
+            'cpf.unique' => 'CPF já cadastrado.',
         ];
     }
 

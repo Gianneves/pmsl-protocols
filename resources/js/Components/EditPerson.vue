@@ -116,8 +116,6 @@ const submit = () => form.submit({
   }
 });
 
-
-
 </script>
 
 <style scoped>
