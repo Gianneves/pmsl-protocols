@@ -59,7 +59,7 @@
                         </div>
                         <div class="mt-4">
                             <v-text-field id="cpf" type="text" label="CPF" v-model="form.cpf"
-                                @change="form.validate('cpf')" required autofocus autocomplete="cpf" @input="formatCPF"
+                                @change="form.validate('cpf')" required autofocus autocomplete="cpf"
                                 v-mask="'###.###.###-##'" variant="outlined"></v-text-field>
                             <span v-if="form.invalid('cpf')" class="text-base text-red-500">
                                 {{ form.errors.cpf }}
@@ -126,16 +126,6 @@ const submit = () => form.submit({
         });
     }
 });
-
-
-const formatCPF = () => {
-    let cpf = form.cpf.replace(/\D/g, '');
-    cpf = cpf.replace(/^(\d{3})(\d)/, '$1.$2');
-    cpf = cpf.replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
-    cpf = cpf.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
-    form.cpf = cpf;
-    form.validate('cpf');
-}
 
 </script>
 
