@@ -25,6 +25,9 @@
                                         #
                                     </th>
                                     <th class="text-left">
+                                        Nome
+                                    </th>
+                                    <th class="text-left">
                                         E-mail
                                     </th>
                                     <th class="text-left">
@@ -41,6 +44,7 @@
                             <tbody>
                                 <tr v-for="user in displayedUser" :key="user.id">
                                     <td>{{ user.id }}</td>
+                                    <td>{{ user.name }}</td>
                                     <td>{{ user.email }}</td>
                                     <td>{{ formatedProfile(user.profile) }}</td>
                                     <td>{{ user.active }}</td>
