@@ -25,6 +25,7 @@ class UserCreateRequest extends FormRequest
     public function rules(): array
     {
         $userId = $this->route('user');
+        $cpf = $this->input('cpf') ? preg_replace('/\D/', '', $this->input('cpf')) : null;
 
         $rules = [
             'name' => 'required|min:3|max:255',
@@ -38,7 +39,9 @@ class UserCreateRequest extends FormRequest
             $rules['cpf'] = [
                 'required',
                 new CPFValidation,
-                Rule::unique('people', 'cpf')->ignore($userId),
+                Rule::unique('users', 'cpf')->ignore($userId)->where(function ($query) use ($cpf) {
+                    return $query->where('cpf', $cpf);
+                }),
             ];
             $rules['email'] = [
                 'required',
@@ -61,7 +64,16 @@ class UserCreateRequest extends FormRequest
             'cpf' => 'CPF inválido!',
             'confirmed' => 'Senhas devem ser iguais!',
             'cpf.unique' => 'CPF já cadastrado.',
-            'email.unique' => 'Email já cadastrado.',
+            'email.unique' => 'Email já cadastrado.'
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->cpf) {
+            $this->merge([
+                'cpf' => preg_replace('/\D/', '', $this->cpf),
+            ]);
+        }
     }
 }

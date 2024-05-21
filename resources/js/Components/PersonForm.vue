@@ -83,7 +83,6 @@ import { useForm } from 'laravel-precognition-vue-inertia';
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 
-
 const toast = useToast();
 const emit = defineEmits(['closeDialog']);
 
@@ -99,22 +98,25 @@ const form = useForm('post', route('person.store'), {
     complement: '',
 });
 
-const submit = () => form.submit({
-    preserveScroll: true,
-    onSuccess: () => {
-        form.reset();
-        toast.success("Pessoa criada com Sucesso!", {
-            position: 'top-right',
-        });
-        emit('closeDialog');
-    },
-    onError: () => {
-        toast.error("Erro ao criar Pessoa!", {
-            position: 'top-right',
-        });
-        
-    }
-});
+const submit = () => {
+    form.cpf = form.cpf.replace(/\D/g, ''); 
+
+    form.submit({
+        preserveScroll: true,
+        onSuccess: () => {
+            form.reset();
+            toast.success("Pessoa criada com Sucesso!", {
+                position: 'top-right',
+            });
+            emit('closeDialog');
+        },
+        onError: () => {
+            toast.error("Erro ao criar Pessoa!", {
+                position: 'top-right',
+            });
+        }
+    });
+};
 
 
 

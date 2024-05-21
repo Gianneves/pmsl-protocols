@@ -24,6 +24,7 @@ class UserStoreRequest extends FormRequest
     {
 
         $userId = $this->route('user');
+        $cpf = $this->input('cpf') ? preg_replace('/\D/', '', $this->input('cpf')) : null;
 
         $rules = [
             'name' => 'required|min:3|max:255',
@@ -31,15 +32,15 @@ class UserStoreRequest extends FormRequest
             'gender' => 'required|min:3'
         ];
     
-
         if ($this->isMethod('PUT')) {
             $rules['cpf'] = 'sometimes';
         } else {
-          
             $rules['cpf'] = [
                 'required',
                 new CPFValidation,
-                Rule::unique('people', 'cpf')->ignore($userId),
+                Rule::unique('people', 'cpf')->ignore($userId)->where(function ($query) use ($cpf) {
+                    return $query->where('cpf', $cpf);
+                }),
             ];
         }
     
@@ -57,5 +58,12 @@ class UserStoreRequest extends FormRequest
         ];
     }
 
-
+    protected function prepareForValidation()
+    {
+        if ($this->cpf) {
+            $this->merge([
+                'cpf' => preg_replace('/\D/', '', $this->cpf),
+            ]);
+        }
+    }
 }
