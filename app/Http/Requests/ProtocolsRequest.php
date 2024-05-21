@@ -37,9 +37,25 @@ class ProtocolsRequest extends FormRequest
                 }),
             ],
             'departament_id' => 'required',
-            'files.*' => 'sometimes|file|mimes:jpg,jpeg,png,pdf|max:3000',
-            'files' => 'max:5' 
+            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:3072',
+            'files' => 'nullable|array|max:5'
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $totalSize = 0;
+            if ($this->has('files')) {
+                foreach ($this->file('files') as $file) {
+                    $totalSize += $file->getSize();
+                }
+            }
+            $maxSize = 3 * 1024 * 1024; 
+            if ($totalSize > $maxSize) {
+                $validator->errors()->add('files', 'O tamanho total dos arquivos não pode exceder 3MB.');
+            }
+        });
     }
 
     public function messages()
@@ -49,10 +65,10 @@ class ProtocolsRequest extends FormRequest
             'between' => 'O prazo deve ser entre 5 e 30 dias.',
             'numeric' => 'O prazo deve ser um valor numérico.',
             'person_id.exists' => 'O contribuinte deve ter pelo menos 16 anos de idade.',
-            'files.*.file' => 'O campo precisa ser um arquivo.',
-            'files.*.mimes' => 'Os arquivos devem estar em formato JPG, JPEG, PNG ou PDF.',
-            'files.*.max' => 'O tamanho máximo de arquivo permitido é 3MB.',
-            'files.max' => 'Você só pode enviar no máximo 5 arquivos.'
+            'files.*.mimes' => 'Apenas arquivos do tipo JPG, JPEG, PNG e PDF são permitidos.',
+            'files.*.max' => 'Cada arquivo não pode exceder 3MB.',
+            'files.max' => 'Você pode fazer upload de no máximo 5 arquivos.',
+            'files.total' => 'O tamanho total dos arquivos não pode exceder 3MB.'
         ];
     }
 }

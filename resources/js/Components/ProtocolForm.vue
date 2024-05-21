@@ -58,17 +58,18 @@
                             </v-col>
                             <v-col>
                                 <v-file-input label="Anexar arquivos" id="files" v-model="form.files" variant="outlined"
-                                    multiple maxlength="2000" style="width: 300px; overflow-x: auto;"
-                                    @change="form.validate('files')">
+                                    multiple maxlength="5" style="width: 300px; overflow-x: auto;"
+                                    accept=".jpg,.jpeg,.png,.pdf" @change="validateFiles">
                                 </v-file-input>
-                                <span v-if="form.invalid('files')" class="text-base text-red-500">
-                                    {{ form.errors.files }}
+                                <span v-if="form.errors.files && form.errors.files.length"
+                                    class="text-base text-red-500">
+                                    {{ form.errors.files.join(' ') }}
                                 </span>
                                 <div v-if="form.files.length > 0">
                                     <h3 class="font-bold">Arquivos Selecionados:</h3>
                                     <ul>
                                         <li v-for="(file, index) in form.files" :key="index" class="mt-2">
-                                            {{ file.name }}
+                                            {{ file.name }} ({{ formatFileSize(file.size) }})
                                             <v-btn @click="removeFile(index)" rounded="xl" color="red" size="x-small">
                                                 X
                                             </v-btn>
@@ -117,6 +118,48 @@ const form = useForm('post', route('protocols.store'), {
     files: []
 });
 
+const validateFiles = () => {
+    const files = form.files;
+    const maxFiles = 5;
+    const maxSize = 3 * 1024 * 1024; 
+    const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+
+    form.errors.files = [];
+
+    if (files.length > maxFiles) {
+        form.errors.files.push(`Você pode fazer upload de no máximo ${maxFiles} arquivos.`);
+    }
+
+    let allFilesTooLarge = true;
+    let totalSize = 0;
+
+    files.forEach(file => {
+        if (!allowedTypes.includes(file.type)) {
+            form.errors.files.push(`${file.name} não é um tipo de arquivo permitido.`);
+        }
+        if (file.size > maxSize) {
+            form.errors.files.push(`${file.name} excede o tamanho máximo permitido de 3MB.`);
+        } else {
+            allFilesTooLarge = false;
+        }
+        totalSize += file.size;
+    });
+
+    if (totalSize > maxSize) {
+        form.errors.files.push('O tamanho total dos arquivos não pode exceder 3MB.');
+    }
+
+    if (allFilesTooLarge) {
+        form.errors.files.push('Todos os arquivos enviados excedem o tamanho máximo permitido de 3MB.');
+    }
+
+    if (form.errors.files.length > 0) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 const submit = () => form.submit({
     preserveScroll: true,
     onSuccess: () => {
@@ -133,16 +176,25 @@ const submit = () => form.submit({
     }
 });
 
+
 const removeFile = (index) => {
     form.files.splice(index, 1);
+    validateFiles();
 }
 
+const formatFileSize = (size) => {
+    if (size < 1024) return size + ' bytes';
+    else if (size < 1024 * 1024) return (size / 1024).toFixed(1) + ' KB';
+    else return (size / (1024 * 1024)).toFixed(1) + ' MB';
+}
 
 const availableDepartments = computed(() => {
     return props.departament.filter(department => {
         return props.authUser.grant_access.some(access => access.departament_id === department.id);
     });
 });
+
+
 
 </script>
 
