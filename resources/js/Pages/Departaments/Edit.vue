@@ -94,7 +94,9 @@ const props = defineProps({
 
 const filteredUser = computed(() => {
     return props.users.filter(user => {
+        if(user.profile === 'A') {
         return !props.grantAccess.some(permission => permission.user_id === user.id);
+        }
     })
 })
 
