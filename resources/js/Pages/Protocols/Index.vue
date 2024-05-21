@@ -36,7 +36,10 @@
                                         Data
                                     </th>
                                     <th class="text-left">
-                                        Prazo
+                                        Prazo Final
+                                    </th>
+                                    <th class="text-left">
+                                        Prazo em dias
                                     </th>
                                     <th class="text-left">
                                         Nome do Contribuinte
@@ -57,6 +60,7 @@
                                     <td>{{ protocol.id }}</td>
                                     <td>{{ protocol.created_data }}</td>
                                     <td>{{ formatDeadline(protocol.created_data, protocol.deadline) }}</td>
+                                    <td>{{ protocol.deadline }}</td>
                                     <td>{{ protocol.person.name }}</td>
                                     <td>{{ protocol.departaments.name }}</td>
                                     <td>
