@@ -16,7 +16,7 @@
                                 <v-btn @click="isDialogOpen = true">Cadastrar</v-btn>
                                 <v-dialog v-model="isDialogOpen" @update:modelValue="updateDialogStatus" width="900px">
                                     <ProtocolForm :isDialogOpen="isDialogOpen" @closeDialog="closeDialog"
-                                        :people="people" :departament="departament" />
+                                        :people="people" :departament="departament" :authUser="authUser" />
                                 </v-dialog>
                             </div>
                         </div>

@@ -66,7 +66,6 @@ class ProtocolsController extends Controller
             'files' => '',
         ]);
 
-
         Attendance::create([
             'protocol_id' => $protocol->id,
             'situation' => 'A'
@@ -101,13 +100,29 @@ class ProtocolsController extends Controller
         $attendance = Attendance::all();
         $people = Person::all();
         $departament = Departaments::all();
+        $authUser = Auth::user();
+
+        if ($authUser->profile === 'A') {
+        
+            $userDepartments = $authUser->grantAccess->map(function ($access) {
+                return $access->departament_id;
+            });
+
+            $protocols = ProtocolsResource::collection(
+                Protocols::whereIn('departament_id', $userDepartments)->with('person', 'departaments', 'attendances')->get()
+            );
+        } else {
+            $protocols = ProtocolsResource::collection(
+                Protocols::with('person', 'departaments', 'attendances')->get()
+            );
+        }
 
         $files = [];
         if (!empty($protocol->files)) {
             $files = explode(',', $protocol->files);
         }
 
-        return Inertia::render('Protocols/Edit', compact('protocol', 'people', 'departament', 'attendance', 'files'));
+        return Inertia::render('Protocols/Edit', compact('protocol', 'people', 'departament', 'attendance', 'files', 'authUser'));
     }
 
     /**

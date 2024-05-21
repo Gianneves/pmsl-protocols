@@ -69,7 +69,11 @@
                                 </v-col>
 
                                 <v-col cols="12" md="4">
-                                    <v-select label="Departamento" v-model="form.departament_id"
+                                    <v-select v-if="authUser.profile === 'A'" label="Departamento" v-model="form.departament_id"
+                                        @change="form.validate('departament_id')" :items="availableDepartments" item-title="name"
+                                        item-value="id" required>
+                                    </v-select>
+                                    <v-select v-else label="Departamento" v-model="form.departament_id"
                                         @change="form.validate('departament_id')" :items="departament" item-title="name"
                                         item-value="id" required>
                                     </v-select>
@@ -136,6 +140,7 @@ import { useForm } from 'laravel-precognition-vue-inertia';
 import { defineProps, ref } from 'vue';
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
+import { computed } from 'vue';
 
 const toast = useToast();
 const isDialogOpen = ref(false);
@@ -146,8 +151,11 @@ const props = defineProps({
     protocol: Object,
     departament: Array,
     attendance: Array,
-    files: Array
+    files: Array,
+    authUser: Object
 });
+
+
 
 const updateDialogStatus = (value) => {
     isDialogOpen.value = value;
@@ -188,6 +196,13 @@ const submit = () => form.submit({
     }
 });
 
+const availableDepartments = computed(() => {
+ 
+    
+    return props.departament.filter(department => {
+        return props.authUser.grant_access.some(access => access.departament_id === department.id);
+    });
+});
 
 </script>
 

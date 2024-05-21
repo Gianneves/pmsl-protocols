@@ -1,5 +1,5 @@
 <template>
-    <v-card-text :class="[ 'custom-card', { 'overflow-auto': form.files.length > 2 } ]">
+    <v-card-text :class="['custom-card', { 'overflow-auto': form.files.length > 2 }]">
         <v-card-text>
             <v-card-title>Criar Protocolo</v-card-title>
             <v-form @submit.prevent="submit">
@@ -33,7 +33,11 @@
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-select label="Departamento" v-model="form.departament_id"
+                            <v-select v-if="authUser.profile === 'A'" label="Departamento" v-model="form.departament_id"
+                                @change="form.validate('departament_id')" :items="availableDepartments"
+                                item-title="name" item-value="id" required>
+                            </v-select>
+                            <v-select v-else label="Departamento" v-model="form.departament_id"
                                 @change="form.validate('departament_id')" :items="departament" item-title="name"
                                 item-value="id" required>
                             </v-select>
@@ -54,7 +58,8 @@
                             </v-col>
                             <v-col>
                                 <v-file-input label="Anexar arquivos" id="files" v-model="form.files" variant="outlined"
-                                    multiple maxlength="2000" style="width: 300px; overflow-x: auto;" @change="form.validate('files')">
+                                    multiple maxlength="2000" style="width: 300px; overflow-x: auto;"
+                                    @change="form.validate('files')">
                                 </v-file-input>
                                 <span v-if="form.invalid('files')" class="text-base text-red-500">
                                     {{ form.errors.files }}
@@ -63,8 +68,8 @@
                                     <h3 class="font-bold">Arquivos Selecionados:</h3>
                                     <ul>
                                         <li v-for="(file, index) in form.files" :key="index" class="mt-2">
-                                            {{ file.name }} 
-                                            <v-btn @click="removeFile(index)" rounded="xl"  color="red" size="x-small" >
+                                            {{ file.name }}
+                                            <v-btn @click="removeFile(index)" rounded="xl" color="red" size="x-small">
                                                 X
                                             </v-btn>
                                         </li>
@@ -87,12 +92,21 @@
 
 <script setup>
 import { useForm } from 'laravel-precognition-vue-inertia';
+import { computed } from 'vue';
 import { defineProps } from 'vue';
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 
 const toast = useToast();
 const emit = defineEmits(['closeDialog']);
+
+const props = defineProps({
+    isDialogOpen: Boolean,
+    people: Array,
+    departament: Array,
+    authUser: Object
+});
+
 
 const form = useForm('post', route('protocols.store'), {
     description: '',
@@ -120,13 +134,14 @@ const submit = () => form.submit({
 });
 
 const removeFile = (index) => {
-    form.files.splice(index, 1); 
+    form.files.splice(index, 1);
 }
 
-const props = defineProps({
-    isDialogOpen: Boolean,
-    people: Array,
-    departament: Array
+
+const availableDepartments = computed(() => {
+    return props.departament.filter(department => {
+        return props.authUser.grant_access.some(access => access.departament_id === department.id);
+    });
 });
 
 </script>
@@ -136,11 +151,10 @@ const props = defineProps({
 .custom-card {
     background-color: #FFF;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
-   
+
 }
 
 .overflow-auto {
-    overflow-y: auto; 
+    overflow-y: auto;
 }
-
 </style>
