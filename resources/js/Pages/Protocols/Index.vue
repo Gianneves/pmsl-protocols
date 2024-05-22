@@ -206,11 +206,11 @@ const formatDeadline = (created_data, deadline) => {
 const getSituationName = (situation) => {
     switch (situation) {
         case 'A':
-            return 'Aberto';
+            return ' Aberto';
         case 'E':
-            return 'Em atendimento';
+            return ' Em atendimento';
         case 'S':
-            return 'Solucionado';
+            return ' Solucionado';
         default:
             return '';
     }

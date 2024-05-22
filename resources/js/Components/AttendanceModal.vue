@@ -14,7 +14,7 @@
                     </v-col>
                     <v-col cols="12" md="6" class="input-col">
                         <v-select label="Situação" v-model="attendanceForm.situation" variant="outlined"
-                            @change="attendanceForm.validate('situation')" :items="['A', 'E', 'S']" required>
+                            @change="attendanceForm.validate('situation')" :items="Object.values(formatLabel)" required>
                         </v-select>
                         <span v-if="attendanceForm.invalid('situation')" class="text-base text-red-500">
                             {{ attendanceForm.errors.situation }}
@@ -52,7 +52,10 @@ const attendanceForm = useForm('post', route('attendances.store'), {
     situation: '',
 });
 
-const attendanceSubmit = () => attendanceForm.submit({
+const attendanceSubmit = () => {
+    const situationValue = Object.keys(formatLabel).find(key => formatLabel[key] === attendanceForm.situation);
+    attendanceForm.situation = situationValue;
+    attendanceForm.submit({
     preserveScroll: true,
     onSuccess: () => {
         attendanceForm.reset();
@@ -67,6 +70,12 @@ const attendanceSubmit = () => attendanceForm.submit({
         });
     }
 });
+}
+const formatLabel = {
+    'A': 'Aberto',
+    'E': 'Em andamento',
+    'S': 'Solucionado'
+}
 
 </script>
 

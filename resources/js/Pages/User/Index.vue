@@ -47,7 +47,7 @@
                                     <td>{{ user.name }}</td>
                                     <td>{{ user.email }}</td>
                                     <td>{{ formatedProfile(user.profile) }}</td>
-                                    <td>{{ user.active }}</td>
+                                    <td>{{ formatedActive(user.active) }}</td>
                                     <td>
                                         <div>
                                             <Link :href="route('user.edit', {user: user.id})" >
@@ -94,6 +94,11 @@ const formatedProfile = (profile) => {
     if (profile === 'T') return 'Administrador TI'
     if (profile === 'S') return 'Administrador Sistema'
     if (profile === 'A') return 'Atendente'
+}
+
+const formatedActive = (active) => {
+    if (active === 'S') return 'Sim'
+    if (active === 'N') return 'Não'
 }
 
 const filteredUser = computed(() => {

@@ -27,7 +27,7 @@
                             </span>
                         </div>
                         <div class="mt-4" v-if="authProfile === 'T'">
-                            <v-select id="profile" label="Perfil" :items="['T', 'S', 'A']" v-model="form.profile"
+                            <v-select id="profile" label="Perfil" :items="Object.values(profileLabels)" v-model="form.profile"
                                 required autofocus autocomplete="profile" @change="form.validate('profile')"
                                 variant="outlined"></v-select>
                             <span v-if="form.invalid('profile')" class="text-base text-red-500">
@@ -35,7 +35,7 @@
                             </span>
                         </div>
                         <div class="mt-4" v-else>
-                            <v-select id="profile" label="Perfil" :items="['A']" v-model="form.profile" required
+                            <v-select id="profile" label="Perfil" :items="Object.values(systemLabel)" v-model="form.profile" required
                                 autofocus autocomplete="profile" @change="form.validate('profile')"
                                 variant="outlined"></v-select>
                             <span v-if="form.invalid('profile')" class="text-base text-red-500">
@@ -51,7 +51,7 @@
                             </span>
                         </div>
                         <div class="mt-4">
-                            <v-select id="active" :items="['S', 'N']" label="Ativo" v-model="form.active"
+                            <v-select id="active" :items="Object.values(activeLabels)" label="Ativo" v-model="form.active"
                                 @change="form.validate('active')" required autofocus autocomplete="active"
                                 variant="outlined"></v-select>
                             <span v-if="form.invalid('active')" class="text-base text-red-500">
@@ -97,20 +97,46 @@ const form = useForm('put', route('user.update', { id: props.user.id }), {
     active: props.user?.active
 });
 
-const submit = () => form.submit({
-    preserveScroll: true,
-    onSuccess: () => {
-        form.reset();
-        toast.success("Usuário editado com Sucesso!", {
-            position: 'top-right',
-        });
-    },
-    onError: () => {
-        toast.error("Erro ao editar usuário!", {
-            position: 'top-right',
-        });
-    }
-});
+
+const submit = () => {
+    const profileValue = Object.keys(profileLabels).find(key => profileLabels[key] === form.profile);
+    const activeValue = Object.keys(activeLabels).find(key => activeLabels[key] === form.active);
+    form.profile = profileValue;
+    form.active = activeValue;
+    form.submit({
+
+        preserveScroll: true,
+        onSuccess: () => {
+            form.reset();
+            toast.success("Usuário editado com Sucesso!", {
+                position: 'top-right',
+            });
+        },
+        onError: () => {
+            toast.error("Erro ao editar usuário!", {
+                position: 'top-right',
+            });
+        }
+    });
+}
+
+
+const profileLabels = {
+    'T': 'Administrador TI',
+    'S': 'Administrador Sistema',
+    'A': 'Atendente'
+}
+
+const activeLabels = {
+    'S': 'Sim',
+    'N': 'Não'
+}
+
+
+const systemLabel = {
+    'A': 'Atendente'
+}
+
 
 
 </script>

@@ -172,7 +172,6 @@ const props = defineProps({
 
 const files = ref(props.files);
 
-// Função para atualizar a lista de arquivos após a exclusão de um arquivo
 const onFileDeleted = (updatedFiles) => {
     files.value = updatedFiles;
 };
