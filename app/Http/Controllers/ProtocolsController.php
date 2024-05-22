@@ -153,6 +153,25 @@ class ProtocolsController extends Controller
         return Redirect::route('protocols.index');
     }
 
+  
+    public function deleteFile(Protocols $protocol, $fileName)
+    {
+        $files = explode(',', $protocol->files);
+
+        if (($key = array_search($fileName, $files)) !== false) {
+            unset($files[$key]);
+
+            $filePath = 'public/protocols/' . trim($fileName);
+            if (Storage::exists($filePath)) {
+                Storage::delete($filePath);
+            }
+
+            $protocol->update(['files' => implode(',', $files)]);
+        }
+
+    return response()->json(['message' => 'Arquivo excluído com sucesso'], 200);
+    }
+
     /**
      * Remove the specified resource from storage.
      */

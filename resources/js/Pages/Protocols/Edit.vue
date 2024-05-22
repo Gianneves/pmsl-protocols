@@ -69,9 +69,9 @@
                                 </v-col>
 
                                 <v-col cols="12" md="4">
-                                    <v-select v-if="authUser.profile === 'A'" label="Departamento" v-model="form.departament_id"
-                                        @change="form.validate('departament_id')" :items="availableDepartments" item-title="name"
-                                        item-value="id" required>
+                                    <v-select v-if="authUser.profile === 'A'" label="Departamento"
+                                        v-model="form.departament_id" @change="form.validate('departament_id')"
+                                        :items="availableDepartments" item-title="name" item-value="id" required>
                                     </v-select>
                                     <v-select v-else label="Departamento" v-model="form.departament_id"
                                         @change="form.validate('departament_id')" :items="departament" item-title="name"
@@ -91,7 +91,7 @@
                                     </span>
                                 </v-col>
                                 <v-col cols="12" md="6" class="input-col">
-                                    <v-card v-if="props.protocol.files" class="card-container" width="350px">
+                                    <v-card v-if="filesExist" class="card-container" width="350px">
                                         <v-card-title>Arquivos:</v-card-title>
                                         <v-table class="px-2">
                                             <thead>
@@ -100,7 +100,7 @@
                                                         Nome:
                                                     </th>
                                                     <th class="text-left">
-                                                        Ver arquivo:
+                                                        Ações:
                                                     </th>
 
                                                 </tr>
@@ -111,7 +111,18 @@
                                                     <td>
                                                         <a :href="`/storage/protocols/${file}`" target="_blank"><v-icon
                                                                 class="mdi mdi-eye"></v-icon></a>
+                                                        <v-icon class="mdi mdi-delete"
+                                                            @click="deleteSelectFile(file)"></v-icon>
                                                     </td>
+                                                    <v-dialog v-model="isDeleteFileOpen"
+                                                        @update:model-value="updateFileDeleteStatus">
+                                                        <DeleteFile :isDeleteFileOpen="isDeleteFileOpen"
+                                                            @closeDeleteFile="closeDeleteFile" 
+                                                            :file="selectedFile"
+                                                            :files="files"
+                                                            :protocol="protocol"
+                                                            @fileDeleted="onFileDeleted" />
+                                                    </v-dialog>
                                                 </tr>
                                             </tbody>
                                         </v-table>
@@ -135,16 +146,20 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import AttendanceModal from '@/Components/AttendanceModal.vue';
+import DeleteFile from '@/Components/DeleteFile.vue';
 import RegisterModal from '@/Components/RegisterModal.vue';
 import { useForm } from 'laravel-precognition-vue-inertia';
 import { defineProps, ref } from 'vue';
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 import { computed } from 'vue';
+import axios from 'axios';
 
 const toast = useToast();
 const isDialogOpen = ref(false);
 const isRegisterOpen = ref(false);
+const selectedFile = ref(null);
+const isDeleteFileOpen = ref(false);
 
 const props = defineProps({
     people: Array,
@@ -155,7 +170,21 @@ const props = defineProps({
     authUser: Object
 });
 
+const files = ref(props.files);
 
+// Função para atualizar a lista de arquivos após a exclusão de um arquivo
+const onFileDeleted = (updatedFiles) => {
+    files.value = updatedFiles;
+};
+
+const deleteSelectFile = (file) => {
+    selectedFile.value = file;
+    isDeleteFileOpen.value = true;
+}
+
+const closeDeleteFile = () => {
+  isDeleteFileOpen.value = false;
+};
 
 const updateDialogStatus = (value) => {
     isDialogOpen.value = value;
@@ -167,6 +196,10 @@ const closeDialog = () => {
 
 const updateRegisterStatus = (value) => {
     isRegisterOpen.value = value;
+};
+
+const updateFileDeleteStatus = (value) => {
+    isDeleteFileOpen.value = value;
 };
 
 const closeRegister = () => {
@@ -197,13 +230,12 @@ const submit = () => form.submit({
 });
 
 const availableDepartments = computed(() => {
- 
-    
     return props.departament.filter(department => {
         return props.authUser.grant_access.some(access => access.departament_id === department.id);
     });
 });
 
+const filesExist = computed(() => files.value.length > 0);
 </script>
 
 

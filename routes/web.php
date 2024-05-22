@@ -6,6 +6,7 @@ use App\Http\Controllers\PersonController;
 use App\Http\Controllers\ProtocolsController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DepartamentsController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\PdfController;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
@@ -32,6 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('pdf/protocolPdf', [PdfController::class, 'protocolPdf'])->name('pdf.protocolPdf');
     Route::get('pdf/{id}/', [PdfController::class, 'attendancePdf'])->name('pdf.attendancePdf');
     Route::resource('audit', AuditController::class);
+    Route::delete('protocols/{protocol}/files/{fileName}', [ProtocolsController::class, 'deleteFile'])->name('protocols.deleteFile');
 });
 
 require __DIR__ . '/auth.php';
