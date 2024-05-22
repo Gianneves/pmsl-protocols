@@ -89,13 +89,26 @@ const props = defineProps({
     authProfile: Object
 });
 
+const translateProfileForm = (profile) => {
+    if(profile === 'A') return 'Atendente'
+    if(profile === 'S') return 'Administrador Sistema'
+    if(profile === 'T') return 'Administrador Ti'
+}
+
+
+const translateActiveForm = (active) => {
+    if(active === 'S') return 'Sim'
+    if(active === 'N') return 'Não'
+}
+
 const form = useForm('put', route('user.update', { id: props.user.id }), {
     name: props.user?.name,
     email: props.user?.email,
-    profile: props.user?.profile,
+    profile: translateProfileForm(props.user.profile),
     cpf: props.user?.cpf,
-    active: props.user?.active
+    active:  translateActiveForm(props.user.active) 
 });
+
 
 
 const submit = () => {

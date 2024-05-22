@@ -104,6 +104,7 @@ const formatedActive = (active) => {
 const filteredUser = computed(() => {
     if (searchFilter.value !== '') {
         return props.user.filter(u =>
+            u.name.includes(searchFilter.value.toLowerCase()) ||
             u.email.includes(searchFilter.value.toLowerCase()));
     }
     return props.user;
