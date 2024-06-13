@@ -181,8 +181,7 @@ class ProtocolsController extends Controller
         if (!empty($protocol->files)) {
             $files = explode(',', $protocol->files);
             foreach ($files as $file) {
-                $filePath = 'protocols/' . trim($file);
-
+                $filePath = 'public/protocols/' . trim($file); 
                 if (Storage::exists($filePath)) {
                     Storage::delete($filePath);
                 }
