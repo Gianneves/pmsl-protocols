@@ -6766,16 +6766,16 @@
         },
         {
             "name": "lucascudo/laravel-pt-br-localization",
-            "version": "v2.2.0",
+            "version": "v2.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucascudo/laravel-pt-BR-localization.git",
-                "reference": "7a282e7f47ed1198ec579832dd8120b82ff5a1ee"
+                "reference": "60c28db1d959f3d8b2c842393dc6eabb5d6e2fe5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucascudo/laravel-pt-BR-localization/zipball/7a282e7f47ed1198ec579832dd8120b82ff5a1ee",
-                "reference": "7a282e7f47ed1198ec579832dd8120b82ff5a1ee",
+                "url": "https://api.github.com/repos/lucascudo/laravel-pt-BR-localization/zipball/60c28db1d959f3d8b2c842393dc6eabb5d6e2fe5",
+                "reference": "60c28db1d959f3d8b2c842393dc6eabb5d6e2fe5",
                 "shasum": ""
             },
             "type": "library",
@@ -6805,7 +6805,7 @@
             "homepage": "https://github.com/lucascudo/laravel-pt-br-localization",
             "support": {
                 "issues": "https://github.com/lucascudo/laravel-pt-BR-localization/issues",
-                "source": "https://github.com/lucascudo/laravel-pt-BR-localization/tree/v2.2.0"
+                "source": "https://github.com/lucascudo/laravel-pt-BR-localization/tree/v2.2.1"
             },
             "funding": [
                 {
@@ -6821,7 +6821,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-04-25T11:18:02+00:00"
+            "time": "2024-05-09T13:57:11+00:00"
         },
         {
             "name": "mockery/mockery",

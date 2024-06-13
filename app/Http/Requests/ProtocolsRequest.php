@@ -46,11 +46,14 @@ class ProtocolsRequest extends FormRequest
     {
         $validator->after(function ($validator) {
             $totalSize = 0;
-            if ($this->has('files')) {
-                foreach ($this->file('files') as $file) {
+            $files = $this->file('files', []);
+
+            if (is_array($files)) {
+                foreach ($files as $file) {
                     $totalSize += $file->getSize();
                 }
             }
+            
             $maxSize = 3 * 1024 * 1024; 
             if ($totalSize > $maxSize) {
                 $validator->errors()->add('files', 'O tamanho total dos arquivos não pode exceder 3MB.');
