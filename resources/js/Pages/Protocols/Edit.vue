@@ -111,7 +111,7 @@
                                                     <td>
                                                         <a :href="`/storage/protocols/${file}`" target="_blank"><v-icon
                                                                 class="mdi mdi-eye"></v-icon></a>
-                                                        <v-icon class="mdi mdi-delete"
+                                                        <v-icon class="mdi mdi-delete ml-2"
                                                             @click="deleteSelectFile(file)"></v-icon>
                                                     </td>
                                                     <v-dialog v-model="isDeleteFileOpen"
