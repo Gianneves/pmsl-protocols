@@ -1,7 +1,7 @@
 <template>
     <v-card-text class="custom-card">
         <v-card-text>
-            <v-card-title>Cadastrar Departamento</v-card-title>
+            <v-card-title>Cadastro de Departamento</v-card-title>
             <v-form @submit.prevent="submit">
                 <v-container fuid>
                     <v-row>
